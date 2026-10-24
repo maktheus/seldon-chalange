@@ -1,0 +1,1046 @@
+<title>Seldon Fleet</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+/* Layout: console de instrumentação — faixas full-bleed sobre grade técnica,
+   conteúdo em coluna única de 1120px, hero com campo 3D ao fundo. */
+:root{
+  --void:#05090f;
+  --ink:#0a111c;
+  --panel:#0e1826;
+  --panel-2:#132235;
+  --line:#1e3047;
+  --line-soft:#16253a;
+  --text:#e4ecf6;
+  --text-2:#9bb0c7;
+  --text-3:#60788f;
+  --blue:#4d93ff;
+  --blue-deep:#1b4f9c;
+  --ok:#3ecf8e;
+  --warn:#f2b441;
+  --crit:#ff6b6b;
+  --grey:#7a8aa0;
+  --sans:"IBM Plex Sans","Segoe UI",Roboto,system-ui,sans-serif;
+  --cond:"IBM Plex Sans Condensed","IBM Plex Sans","Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--void);color:var(--text);
+  font-family:var(--sans);font-size:16px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+.wrap{
+  max-width:1120px;margin:0 auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.band{position:relative}
+.band + .band{border-top:1px solid var(--line-soft)}
+.band-inner{padding-block:72px}
+
+h1,h2,h3{font-family:var(--cond);font-weight:700;letter-spacing:-.015em;text-wrap:balance;margin:0}
+h2{font-size:clamp(28px,4.2vw,42px);line-height:1.06}
+h3{font-size:20px;line-height:1.2}
+p{margin:0 0 14px}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:3px}
+
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--blue);display:flex;align-items:center;gap:10px;margin-bottom:18px;
+}
+.eyebrow::before{content:"";width:28px;height:1px;background:var(--blue);flex:none}
+.lede{color:var(--text-2);font-size:18px;max-width:62ch;margin-top:14px}
+.mono{font-family:var(--mono)}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* ───────────────── hero ───────────────── */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line-soft)}
+#scene{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(to bottom,rgba(5,9,15,.72) 0%,rgba(5,9,15,.35) 42%,rgba(5,9,15,.94) 100%),
+    linear-gradient(to right,rgba(5,9,15,.9) 0%,rgba(5,9,15,.1) 55%,transparent 100%);
+}
+.hero-inner{position:relative;z-index:2;padding-block:92px 76px}
+.hero h1{
+  font-size:clamp(52px,10vw,118px);line-height:.88;letter-spacing:-.035em;
+  margin:0 0 6px;
+}
+.hero h1 span{display:block;color:var(--blue)}
+.hero-sub{
+  font-family:var(--cond);font-weight:600;font-size:clamp(17px,2.4vw,23px);
+  color:var(--text-2);letter-spacing:.01em;margin-bottom:30px;
+}
+.hero-sentence{
+  max-width:60ch;font-size:clamp(16px,1.6vw,18.5px);line-height:1.58;color:var(--text);
+  border-left:2px solid var(--blue);padding-left:20px;
+}
+.hero-sentence b{font-weight:600;color:#fff;background:rgba(77,147,255,.14);padding:0 3px;border-radius:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:34px}
+.chips span{
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-2);border:1px solid var(--line);border-radius:3px;padding:6px 11px;
+  background:rgba(14,24,38,.6);backdrop-filter:blur(3px);
+}
+.scroll-cue{
+  display:flex;align-items:center;gap:10px;margin-top:44px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);
+}
+.scroll-cue i{
+  width:1px;height:26px;background:linear-gradient(to bottom,var(--blue),transparent);
+  animation:drop 2.4s ease-in-out infinite;transform-origin:top;
+}
+@keyframes drop{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+
+/* ───────────────── blocos ───────────────── */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{
+  background:linear-gradient(180deg,var(--panel) 0%,var(--ink) 100%);
+  border:1px solid var(--line-soft);border-radius:10px;padding:26px 24px;min-width:0;
+}
+.card .tag{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--text-3);display:block;margin-bottom:12px;
+}
+.card h3{margin-bottom:8px}
+.card p{color:var(--text-2);font-size:15px;margin-bottom:0}
+.card p + p{margin-top:10px}
+
+/* ───────────────── telefones ───────────────── */
+.phones{
+  display:flex;gap:44px;justify-content:center;align-items:flex-start;flex-wrap:wrap;
+  margin-top:46px;perspective:1600px;
+}
+.phone-slot{display:flex;flex-direction:column;align-items:center;gap:16px;min-width:0}
+.phone-cap{
+  font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3);
+}
+.phone-cap b{color:var(--blue);font-weight:500}
+.phone{
+  width:300px;max-width:100%;height:600px;border-radius:30px;
+  background:#070d16;border:1px solid #223449;
+  box-shadow:0 40px 90px -30px rgba(0,0,0,.9),0 0 0 7px #0b1118,inset 0 0 0 1px rgba(255,255,255,.04);
+  padding:9px;position:relative;overflow:hidden;flex:none;
+  transform:rotateY(9deg) rotateX(3deg);transform-style:preserve-3d;
+  transition:transform .6s cubic-bezier(.2,.7,.3,1);
+}
+.phone.right{transform:rotateY(-9deg) rotateX(3deg)}
+.phone:hover,.phone.right:hover{transform:rotateY(0) rotateX(0) translateY(-6px)}
+.screen{
+  width:100%;height:100%;border-radius:22px;background:#0a1018;
+  overflow:hidden;position:relative;display:flex;flex-direction:column;
+}
+.screen::after{ /* varredura de instrumentação */
+  content:"";position:absolute;left:0;right:0;height:120px;top:-120px;z-index:4;pointer-events:none;
+  background:linear-gradient(to bottom,transparent,rgba(77,147,255,.09),transparent);
+  animation:sweep 6.5s linear infinite;
+}
+@keyframes sweep{0%{top:-120px}100%{top:620px}}
+.sysbar{
+  display:flex;justify-content:space-between;align-items:center;flex:none;
+  padding:9px 16px 5px;font-family:var(--mono);font-size:10px;color:var(--text-3);
+}
+.appbar{flex:none;padding:6px 16px 12px;border-bottom:1px solid #16222f}
+.appbar h4{margin:0;font-family:var(--cond);font-size:19px;font-weight:700;letter-spacing:-.01em}
+.appbar .sub{font-family:var(--mono);font-size:10px;color:var(--text-3);letter-spacing:.08em;margin-top:2px}
+.filters{
+  display:flex;gap:6px;flex:none;padding:11px 16px;overflow:hidden;
+  -webkit-mask-image:linear-gradient(to right,#000 80%,transparent 100%);
+  mask-image:linear-gradient(to right,#000 80%,transparent 100%);
+}
+.filters b{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;font-weight:500;
+  padding:4px 8px;border-radius:20px;border:1px solid #223449;color:var(--text-2);white-space:nowrap;
+}
+.filters b.on{background:rgba(77,147,255,.16);border-color:var(--blue);color:#cfe1ff}
+.rows{flex:1;overflow:hidden;padding:2px 10px 10px}
+.row{
+  display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
+  padding:11px 10px;border-radius:9px;border:1px solid transparent;
+  animation:land .7s cubic-bezier(.2,.8,.3,1) both;
+}
+.row:nth-child(1){animation-delay:.05s}
+.row:nth-child(2){animation-delay:.13s}
+.row:nth-child(3){animation-delay:.21s}
+.row:nth-child(4){animation-delay:.29s}
+.row:nth-child(5){animation-delay:.37s}
+.row:nth-child(6){animation-delay:.45s}
+@keyframes land{from{transform:translateY(9px)}to{transform:none}}
+.row.sel{background:rgba(77,147,255,.08);border-color:rgba(77,147,255,.3)}
+.row .id{font-family:var(--mono);font-size:12.5px;color:var(--text);letter-spacing:.02em}
+.row .mdl{font-size:11.5px;color:var(--text-3);margin-top:1px}
+.row .bat{font-family:var(--mono);font-size:11px;color:var(--text-2);display:block;text-align:right;margin-bottom:5px}
+.pill{
+  font-family:var(--mono);font-size:8.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 7px;border-radius:3px;border:1px solid currentColor;white-space:nowrap;display:inline-block;
+}
+.p-ok{color:var(--ok);background:rgba(62,207,142,.1)}
+.p-wa{color:var(--warn);background:rgba(242,180,65,.1)}
+.p-cr{color:var(--crit);background:rgba(255,107,107,.1)}
+.p-vo{color:var(--grey);background:rgba(122,138,160,.1)}
+.p-cr.beat{animation:beat 2.6s ease-in-out infinite}
+@keyframes beat{0%,100%{box-shadow:0 0 0 0 rgba(255,107,107,0)}50%{box-shadow:0 0 0 4px rgba(255,107,107,.13)}}
+
+/* tela de detalhe */
+.det{flex:1;overflow:hidden;padding:4px 16px 16px}
+.det .back{font-family:var(--mono);font-size:11px;color:var(--blue);margin-bottom:12px;display:block}
+.det .big{font-family:var(--cond);font-size:26px;font-weight:700;line-height:1.05;letter-spacing:-.01em}
+.det .mdl2{font-size:12px;color:var(--text-3);margin:2px 0 14px}
+.verdict{
+  border:1px solid rgba(255,107,107,.35);background:rgba(255,107,107,.07);
+  border-radius:9px;padding:12px 13px;margin-bottom:16px;
+}
+.verdict .vt{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--crit);margin-bottom:6px}
+.verdict p{font-size:12.5px;line-height:1.5;color:#ffd9d9;margin:0}
+.verdict p b{color:#fff;font-weight:600}
+.specs{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#16222f;border:1px solid #16222f;border-radius:8px;overflow:hidden}
+.specs div{background:#0b121b;padding:9px 11px}
+.specs dt{font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);margin:0 0 3px}
+.specs dd{margin:0;font-family:var(--mono);font-size:12.5px;color:var(--text)}
+.specs dd small{color:var(--text-3);font-size:10px}
+.det-foot{margin-top:16px;display:flex;flex-direction:column;gap:9px}
+.det-foot .fav{
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--warn);
+  border:1px solid rgba(242,180,65,.35);background:rgba(242,180,65,.08);
+  border-radius:7px;padding:10px 11px;text-align:center;
+}
+.det-foot .seen{font-family:var(--mono);font-size:10px;color:var(--text-3);letter-spacing:.08em;text-align:center}
+
+/* ───────────────── camadas 3d ───────────────── */
+.stack{
+  perspective:1300px;display:flex;justify-content:center;
+  padding:46px 0 10px;min-height:330px;
+}
+.stack-in{transform-style:preserve-3d;transform:rotateX(56deg) rotateZ(-38deg);position:relative;width:300px;height:170px}
+.layer{
+  position:absolute;inset:0;border-radius:8px;border:1px solid var(--line);
+  background:linear-gradient(135deg,rgba(19,34,53,.95),rgba(10,17,28,.9));
+  display:flex;flex-direction:column;justify-content:center;padding:16px 18px;
+  box-shadow:0 20px 40px -24px rgba(0,0,0,.9);
+  animation:hover 7s ease-in-out infinite;
+}
+.layer .lname{font-family:var(--mono);font-size:13px;color:var(--text);letter-spacing:.06em}
+.layer .lnote{font-size:11px;color:var(--text-3);margin-top:3px;line-height:1.35}
+.l-ui{transform:translateZ(120px);animation-delay:0s;border-color:rgba(122,138,160,.35)}
+.l-data{transform:translateZ(60px);animation-delay:.5s;border-color:rgba(122,138,160,.35)}
+.l-dom{
+  transform:translateZ(0);animation-delay:1s;
+  border-color:var(--blue);box-shadow:0 0 44px -6px rgba(77,147,255,.4);
+  background:linear-gradient(135deg,rgba(27,63,111,.95),rgba(10,20,34,.95));
+}
+@keyframes hover{0%,100%{margin-top:0}50%{margin-top:-7px}}
+.dep{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:8px}
+.dep .txt{font-family:var(--mono);font-size:11.5px;color:var(--text-2);letter-spacing:.06em;text-align:center}
+.dep .txt b{color:var(--blue);font-weight:500}
+
+/* ───────────────── demo de unidade ───────────────── */
+.demo{
+  border:1px solid var(--line);border-radius:12px;overflow:hidden;
+  background:linear-gradient(180deg,var(--panel) 0%,var(--ink) 100%);margin-top:36px;
+}
+.demo-head{
+  display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;
+  padding:16px 22px;border-bottom:1px solid var(--line-soft);
+}
+.demo-head .t{font-family:var(--mono);font-size:12px;color:var(--text-2);letter-spacing:.06em}
+.demo-head .t b{color:var(--text);font-weight:500}
+.toggle{display:flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.toggle button{
+  font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  background:transparent;border:0;color:var(--text-3);padding:9px 14px;cursor:pointer;
+  transition:background .25s,color .25s;
+}
+.toggle button[aria-pressed="true"]{background:rgba(77,147,255,.18);color:#d6e6ff}
+.demo-body{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-soft)}
+.cell{background:var(--ink);padding:20px 18px;min-width:0}
+.cell .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
+.cell .v{font-family:var(--mono);font-size:clamp(20px,3vw,27px);font-variant-numeric:tabular-nums;line-height:1.1;letter-spacing:-.01em}
+.cell .u{font-size:13px;color:var(--text-3);margin-left:3px}
+.cell .v.lit{color:var(--blue)}
+.demo-foot{padding:14px 22px;border-top:1px solid var(--line-soft);font-size:14px;color:var(--text-2)}
+.demo-foot b{color:var(--text);font-weight:600}
+
+/* ───────────────── código ───────────────── */
+.code{
+  background:#070d16;border:1px solid var(--line-soft);border-radius:10px;
+  padding:20px 22px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.72;
+  color:#c7d6e8;white-space:pre;
+}
+.code .k{color:#7fb2ff}.code .s{color:#8ee6ae}.code .n{color:#f2b441}.code .c{color:#5b7390;font-style:italic}
+.code mark{background:rgba(255,107,107,.17);color:#ffb3b3;border-radius:2px;padding:1px 3px}
+
+/* ───────────────── requisitos ───────────────── */
+.reqs-4{grid-template-columns:repeat(4,1fr)}
+.reqs{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);border-radius:10px;overflow:hidden;margin-top:34px}
+.req{background:var(--ink);padding:19px 20px;display:flex;gap:14px;min-width:0}
+.req .n{font-family:var(--mono);font-size:12px;color:var(--blue);flex:none;padding-top:2px}
+.req h4{margin:0 0 4px;font-size:15.5px;font-family:var(--cond);font-weight:700;letter-spacing:-.005em}
+.req p{margin:0;font-size:13.5px;color:var(--text-2);line-height:1.5}
+
+/* ───────────────── rubrica ───────────────── */
+.meters{margin-top:34px;border-top:1px solid var(--line-soft)}
+.meter{display:grid;grid-template-columns:minmax(0,290px) 1fr 54px;gap:20px;align-items:center;padding:17px 0;border-bottom:1px solid var(--line-soft)}
+.meter .lb{font-weight:600;font-size:16px}
+.meter .lb em{display:block;font-style:normal;font-size:13px;color:var(--text-3);font-weight:400;margin-top:2px}
+.track{height:8px;background:#101c2c;border-radius:4px;overflow:hidden;min-width:0}
+.track i{display:block;height:100%;border-radius:4px;background:var(--blue);transform-origin:left;animation:fill 1.1s cubic-bezier(.2,.8,.25,1) both}
+@keyframes fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.meter .pt{font-family:var(--mono);font-size:19px;text-align:right;font-variant-numeric:tabular-nums}
+.meter.bonus .track i{background:var(--ok)}
+.meter.bonus .pt{color:var(--ok)}
+
+/* ───────────────── trilhas ───────────────── */
+.track-card{position:relative;overflow:hidden}
+.track-card::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue);
+}
+.track-card.b::before{background:var(--warn)}
+.track-card.c::before{background:var(--ok)}
+
+/* ───────────────── rodapé ───────────────── */
+footer{border-top:1px solid var(--line-soft);background:#04070c}
+.foot{display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:center;padding-block:36px}
+.foot .mono{font-size:12px;color:var(--text-3);letter-spacing:.06em}
+.doc-link{
+  display:inline-flex;align-items:center;gap:11px;border:1px solid var(--line);
+  border-radius:8px;padding:13px 18px;color:var(--text);font-family:var(--mono);
+  font-size:12.5px;letter-spacing:.06em;background:var(--panel);transition:border-color .25s,background .25s;
+}
+.doc-link:hover{border-color:var(--blue);background:var(--panel-2);text-decoration:none}
+.doc-link span{color:var(--text-3)}
+
+@media (max-width:900px){
+  .two,.three,.reqs,.demo-body{grid-template-columns:1fr}
+  .band-inner{padding-block:56px}
+  .meter{grid-template-columns:1fr 46px;gap:8px 14px}
+  .meter .track{grid-column:1 / -1}
+  .phones{gap:30px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<header class="hero band">
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="wrap hero-inner">
+    <div class="eyebrow">Residência Tecnológica · Módulo 1 · Núcleo Comum</div>
+    <h1>Seldon<span>Fleet</span></h1>
+    <div class="hero-sub">Desafio técnico de engenharia Android</div>
+    <p class="hero-sentence">
+      Construir um app Android em <b>Kotlin/Compose</b> de duas telas que lê um
+      <b>frota.json</b> local, lista os dispositivos classificando cada um como
+      <b>OK</b>, <b>Atenção</b> ou <b>Crítico</b> por uma regra de negócio isolada em
+      <b>domain/</b> e testável na JVM, abre o detalhe com a justificativa da classificação
+      e persiste os favoritos — tratando os dados defeituosos do arquivo e documentando
+      as decisões.
+    </p>
+    <div class="chips">
+      <span>Kotlin</span><span>Jetpack Compose</span><span>Camadas</span>
+      <span>Testes JVM</span><span>Integração contínua</span><span>Sem rede</span>
+    </div>
+    <div class="scroll-cue"><i></i> Role para a especificação</div>
+  </div>
+</header>
+
+<!-- ═══════════════ A MISSÃO ═══════════════ -->
+<section class="band">
+  <div class="wrap band-inner">
+    <div class="eyebrow">01 — A missão</div>
+    <h2>Uma frota responde.<br>Alguém precisa decidir o que ela diz.</h2>
+    <p class="lede">
+      Você recebe o dump de telemetria de uma frota de aparelhos Android: um único arquivo,
+      cerca de trinta dispositivos, nenhuma rede. Seu app lê esse arquivo, decide o estado de
+      saúde de cada aparelho e apresenta o veredito de forma que outra pessoa consiga conferir.
+    </p>
+    <div class="three" style="margin-top:38px">
+      <div class="card">
+        <span class="tag">O que entra</span>
+        <h3>Um arquivo, e só</h3>
+        <p><code class="mono">assets/frota.json</code> — a fonte da verdade. Sem HTTP, sem login,
+        sem banco relacional. Toda a dificuldade está no conteúdo do arquivo, não em alcançá-lo.</p>
+      </div>
+      <div class="card">
+        <span class="tag">O que acontece no meio</span>
+        <h3>Uma decisão computada</h3>
+        <p>Cada dispositivo recebe um status a partir do seu consumo, dos quadros perdidos e das
+        falhas recentes. Essa decisão é a única regra de negócio do app — e ela tem endereço fixo.</p>
+      </div>
+      <div class="card">
+        <span class="tag">O que sai</span>
+        <h3>Um veredito justificado</h3>
+        <p>A tela de detalhe não mostra apenas o status: mostra <em>por que</em>, citando o valor que
+        disparou a classificação. Resultado sem justificativa não é resultado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ O APP ═══════════════ -->
+<section class="band">
+  <div class="wrap band-inner">
+    <div class="eyebrow">02 — A interface</div>
+    <h2>Duas telas. Nada de enfeite.</h2>
+    <p class="lede">
+      Uma lista que deixa o estado da frota visível de relance, e um detalhe que explica a
+      decisão. Esta é uma referência de intenção, não um layout a ser copiado pixel a pixel.
+    </p>
+
+    <div class="phones">
+      <div class="phone-slot">
+        <div class="phone">
+          <div class="screen">
+            <div class="sysbar"><span>09:41</span><span>▮▮▮ 86%</span></div>
+            <div class="appbar">
+              <h4>Frota</h4>
+              <div class="sub">30 DISPOSITIVOS · LIDOS DE ASSETS</div>
+            </div>
+            <div class="filters">
+              <b class="on">TODOS 30</b><b>OK 16</b><b>ATENÇÃO 8</b><b>CRÍTICO 4</b><b>SEM DADOS 2</b>
+            </div>
+            <div class="rows">
+              <div class="row">
+                <div><div class="id">DEV-0137</div><div class="mdl">Pixel 6a · Tensor G1</div></div>
+                <div><span class="bat tnum">38%</span><span class="pill p-wa">Atenção</span></div>
+              </div>
+              <div class="row">
+                <div><div class="id">DEV-0204</div><div class="mdl">Galaxy A54 · Exynos 1380</div></div>
+                <div><span class="bat tnum">61%</span><span class="pill p-ok">OK</span></div>
+              </div>
+              <div class="row sel">
+                <div><div class="id">DEV-0522</div><div class="mdl">Redmi Note 12 · SD 685</div></div>
+                <div><span class="bat tnum">24%</span><span class="pill p-cr beat">Crítico</span></div>
+              </div>
+              <div class="row">
+                <div><div class="id">DEV-0311</div><div class="mdl">Moto G13 · Helio G85</div></div>
+                <div><span class="bat tnum">12%</span><span class="pill p-vo">Sem dados</span></div>
+              </div>
+              <div class="row">
+                <div><div class="id">DEV-0418</div><div class="mdl">Pixel 8 · Tensor G3</div></div>
+                <div><span class="bat tnum">77%</span><span class="pill p-ok">OK</span></div>
+              </div>
+              <div class="row">
+                <div><div class="id">DEV-0630</div><div class="mdl">Galaxy S23 · SD 8 Gen 2</div></div>
+                <div><span class="bat tnum">55%</span><span class="pill p-ok">OK</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-cap"><b>Tela 1</b> — lista, filtro por status, favoritos</div>
+      </div>
+
+      <div class="phone-slot">
+        <div class="phone right">
+          <div class="screen">
+            <div class="sysbar"><span>09:41</span><span>▮▮▮ 86%</span></div>
+            <div class="det">
+              <span class="back">← Frota</span>
+              <div class="big">DEV-0522</div>
+              <div class="mdl2">Redmi Note 12 · Snapdragon 685 · tier low</div>
+              <div class="verdict">
+                <div class="vt">▲ Crítico</div>
+                <p>Dreno relativo de <b>13,4 %/h</b>, acima do limiar de <b>12 %/h</b>.
+                Consumo normalizado a partir de <b>mWh</b> antes da comparação.</p>
+              </div>
+              <div class="specs">
+                <div><dt>Consumo</dt><dd>670<small> mAh/h</small></dd></div>
+                <div><dt>Capacidade</dt><dd>5000<small> mAh</small></dd></div>
+                <div><dt>Tela ligada</dt><dd>142<small> min</small></dd></div>
+                <div><dt>Quadros perdidos</dt><dd>9,8<small> %</small></dd></div>
+                <div><dt>Falhas (7d)</dt><dd>1</dd></div>
+                <div><dt>Nível de API</dt><dd>33</dd></div>
+              </div>
+              <div class="det-foot">
+                <div class="fav">★ FAVORITO · PERSISTIDO</div>
+                <div class="seen">ÚLTIMO CONTATO · 20/10 02:58 UTC</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-cap"><b>Tela 2</b> — detalhe com a justificativa do status</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ ARQUITETURA ═══════════════ -->
+<section class="band">
+  <div class="wrap band-inner">
+    <div class="eyebrow">03 — A restrição</div>
+    <h2>As dependências apontam para dentro.</h2>
+    <p class="lede">
+      Três camadas e uma única regra. <code class="mono">ui</code> conhece
+      <code class="mono">domain</code>. <code class="mono">data</code> conhece
+      <code class="mono">domain</code>. E <code class="mono">domain</code> não conhece ninguém.
+    </p>
+
+    <div class="stack" id="stack">
+      <div class="stack-in" id="stackIn">
+        <div class="layer l-ui">
+          <div class="lname">ui/</div>
+          <div class="lnote">Compose · ViewModel · navegação</div>
+        </div>
+        <div class="layer l-data">
+          <div class="lname">data/</div>
+          <div class="lnote">JSON · DataStore · Android</div>
+        </div>
+        <div class="layer l-dom">
+          <div class="lname">domain/</div>
+          <div class="lnote">Device · DeviceStatus · ClassifyDevice<br>Kotlin puro — zero import android.*</div>
+        </div>
+      </div>
+    </div>
+    <div class="dep">
+      <div class="txt">ui ──▶ <b>domain</b> ◀── data<br>
+        <span style="color:var(--text-3)">domain declara a interface; data a implementa</span></div>
+    </div>
+
+    <div class="two" style="margin-top:44px">
+      <div class="card">
+        <span class="tag">Por que não é burocracia</span>
+        <h3>Isso é o que mantém o teste em milissegundos</h3>
+        <p>Alistair Cockburn formulou a arquitetura hexagonal em 2005 porque estava cansado de
+        suítes que exigiam banco, servidor e interface de pé para verificar uma regra de três linhas.
+        Robert Martin reempacotou o princípio como Clean Architecture em 2012.</p>
+        <p>Consequência direta aqui: a sua regra roda com <code class="mono">./gradlew test</code>,
+        na JVM, sem emulador. Se para testá-la você precisa de um <code class="mono">Context</code>,
+        ela está na camada errada — e isso é visível em dez segundos de leitura.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Como isso é verificado</span>
+        <h3>Dois comandos e uma substituição</h3>
+        <p><code class="mono">grep -r "import android" domain/</code> não pode retornar nada.
+        <code class="mono">./gradlew test</code> precisa passar sem emulador.</p>
+        <p>E trocar a implementação de <code class="mono">DeviceRepository</code> por uma de teste
+        deve exigir zero alteração em <code class="mono">domain/</code>. Classificação escrita dentro
+        de um <code class="mono">Composable</code> ou do parser zera o eixo de arquitetura na rubrica.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ DADOS / ARMADILHAS ═══════════════ -->
+<section class="band">
+  <div class="wrap band-inner">
+    <div class="eyebrow">04 — Os dados</div>
+    <h2>O arquivo não vem limpo. De propósito.</h2>
+    <p class="lede">
+      Um arquivo limpo não mede nada: todo mundo entrega a mesma lista bonita e o instrumento
+      não separa ninguém. Dois defeitos foram deixados no <code class="mono">frota.json</code>,
+      e a rubrica os pontua.
+    </p>
+
+    <div class="code" style="margin-top:32px"><span class="c">// registro normal — unidade em mAh</span>
+<span class="k">{</span> <span class="k">"id"</span>: <span class="s">"DEV-0137"</span>, <span class="k">"batteryCapacityMah"</span>: <span class="n">4410</span>, <span class="k">"screenOnMinutes"</span>: <span class="n">214</span>,
+  <span class="k">"energyConsumed"</span>: <span class="n">980</span>, <span class="k">"energyUnit"</span>: <span class="s">"mAh"</span>, <span class="k">"nominalVoltage"</span>: <span class="n">3.85</span> <span class="k">}</span>
+
+<span class="c">// DEFEITO 1 — a unidade muda entre registros</span>
+<span class="k">{</span> <span class="k">"id"</span>: <span class="s">"DEV-0204"</span>, <span class="k">"batteryCapacityMah"</span>: <span class="n">5000</span>, <span class="k">"screenOnMinutes"</span>: <span class="n">186</span>,
+  <span class="k">"energyConsumed"</span>: <span class="n">3773</span>, <span class="k">"energyUnit"</span>: <mark>"mWh"</mark>, <span class="k">"nominalVoltage"</span>: <span class="n">3.85</span> <span class="k">}</span>
+
+<span class="c">// DEFEITO 2 — divisor nulo esperando o momento certo</span>
+<span class="k">{</span> <span class="k">"id"</span>: <span class="s">"DEV-0311"</span>, <span class="k">"batteryCapacityMah"</span>: <mark>0</mark>, <span class="k">"screenOnMinutes"</span>: <span class="n">97</span>,
+  <span class="k">"energyConsumed"</span>: <span class="n">612</span>, <span class="k">"energyUnit"</span>: <span class="s">"mAh"</span>, <span class="k">"nominalVoltage"</span>: <span class="n">3.8</span> <span class="k">}</span></div>
+
+    <!-- demo interativa -->
+    <div class="demo">
+      <div class="demo-head">
+        <div class="t">DEV-0204 · <b>Galaxy A54</b> · 5000 mAh · 186 min de tela · 3773 mWh</div>
+        <div class="toggle" role="group" aria-label="Modo de leitura da unidade">
+          <button id="btnRaw" aria-pressed="true">Sem converter</button>
+          <button id="btnFix" aria-pressed="false">Convertendo mWh → mAh</button>
+        </div>
+      </div>
+      <div class="demo-body">
+        <div class="cell">
+          <div class="k">Energia considerada</div>
+          <div class="v" id="vEnergy">3773<span class="u">mAh</span></div>
+        </div>
+        <div class="cell">
+          <div class="k">Dreno absoluto</div>
+          <div class="v" id="vAbs">1217,1<span class="u">mAh/h</span></div>
+        </div>
+        <div class="cell">
+          <div class="k">Dreno relativo</div>
+          <div class="v" id="vRel">24,3<span class="u">%/h</span></div>
+        </div>
+        <div class="cell">
+          <div class="k">Status atribuído</div>
+          <div class="v"><span class="pill p-cr" id="vPill" style="font-size:12px;padding:6px 10px">Crítico</span></div>
+        </div>
+      </div>
+      <div class="demo-foot" id="demoFoot">
+        <b>O mesmo aparelho, o mesmo arquivo, o veredito oposto.</b> Tratar 3773 mWh como se fosse
+        mAh infla o consumo em 3,85× e condena um dispositivo saudável. Não é arredondamento — é
+        inversão de resultado.
+      </div>
+    </div>
+
+    <div class="two" style="margin-top:34px">
+      <div class="card">
+        <span class="tag">Defeito 1 — precedente histórico</span>
+        <h3>Mars Climate Orbiter, 1999</h3>
+        <p>A sonda foi perdida porque um módulo de software produzia impulso em libra-força·segundo
+        e o outro consumia em newton·segundo. Ninguém escreveu código errado; os dois lados estavam
+        corretos sob suposições diferentes.</p>
+        <p>Unidade não é detalhe de apresentação. É cláusula de contrato entre componentes — e
+        contrato não declarado é contrato violado mais cedo ou mais tarde.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Defeito 2 — a decisão que você precisa tomar</span>
+        <h3>O divisor nulo</h3>
+        <p>Capacidade <code class="mono">0</code> e tempo de tela <code class="mono">0</code> aparecem
+        como divisor nas derivadas. Há três respostas defensáveis — classificar como indeterminado,
+        excluir da lista, ou falhar explicitamente na ingestão.</p>
+        <p>E uma resposta errada: exibir <code class="mono">NaN</code>, <code class="mono">Infinity</code>,
+        um número inventado, ou deixar o app encerrar. O que a rubrica exige é que a sua escolha
+        esteja escrita <em>antes</em> de ter sido conveniente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ REGRA ═══════════════ -->
+<section class="band">
+  <div class="wrap band-inner">
+    <div class="eyebrow">05 — A regra de referência</div>
+    <h2>Quatro estados, avaliados em ordem.</h2>
+    <p class="lede">
+      Os limiares abaixo são uma referência, não um dogma. Você pode propor outros — por percentil
+      da frota, por tier de SoC, por combinação ponderada. A exigência é que a regra adotada esteja
+      declarada <em>antes</em> dos resultados.
+    </p>
+
+    <div class="reqs reqs-4">
+      <div class="req">
+        <div class="n">01</div>
+        <div><h4><span class="pill p-vo">Indeterminado</span></h4>
+        <p style="margin-top:8px">capacidade ≤ 0 ou ausente · tela ligada ≤ 0 · mWh sem tensão nominal</p></div>
+      </div>
+      <div class="req">
+        <div class="n">02</div>
+        <div><h4><span class="pill p-cr">Crítico</span></h4>
+        <p style="margin-top:8px">dreno ≥ 12 %/h · falhas ≥ 3 · quadros perdidos ≥ 15 %</p></div>
+      </div>
+      <div class="req">
+        <div class="n">03</div>
+        <div><h4><span class="pill p-wa">Atenção</span></h4>
+        <p style="margin-top:8px">dreno ≥ 7 %/h · falhas ≥ 1 · quadros perdidos ≥ 8 %</p></div>
+      </div>
+      <div class="req">
+        <div class="n">04</div>
+        <div><h4><span class="pill p-ok">OK</span></h4>
+        <p style="margin-top:8px">nenhuma das condições anteriores disparou</p></div>
+      </div>
+    </div>
+
+    <div class="two" style="margin-top:30px">
+      <div class="card">
+        <span class="tag">A grandeza comparável</span>
+        <h3>Dreno relativo, não absoluto</h3>
+        <p><code class="mono">dreno %/h = (mAh/h ÷ capacidade) × 100</code>. Novecentos mAh/h é
+        catastrófico num aparelho de 3000 mAh e apenas ruim num de 5000 mAh. Comparar valores
+        absolutos entre capacidades diferentes é erro de normalização — e detectá-lo vale ponto.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Domínio e apresentação</span>
+        <h3>O nome do estado não é o texto da tela</h3>
+        <p>O domínio trabalha com <code class="mono">OK</code>, <code class="mono">ATENCAO</code>,
+        <code class="mono">CRITICO</code>, <code class="mono">INDETERMINADO</code>. A interface
+        rotula como quiser — "Sem dados", por exemplo. Se a sua enumeração de domínio contém a
+        string exibida na tela, as duas camadas vazaram uma na outra.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ REQUISITOS ═══════════════ -->
+<section class="band">
+  <div class="wrap band-inner">
+    <div class="eyebrow">06 — Requisitos</div>
+    <h2>Dez requisitos, todos verificáveis por terceiros.</h2>
+    <p class="lede">Cada um tem um critério de aceitação objetivo no documento técnico.</p>
+
+    <div class="reqs">
+      <div class="req"><div class="n">REQ-01</div><div><h4>Ingestão local</h4>
+        <p>Carrega de <code class="mono">assets/frota.json</code>, sem rede e sem permissão de internet.</p></div></div>
+      <div class="req"><div class="n">REQ-02</div><div><h4>Normalização de unidades</h4>
+        <p>mWh convertido para mAh antes de qualquer comparação, agregação ou classificação.</p></div></div>
+      <div class="req"><div class="n">REQ-03</div><div><h4>Registros incompletos</h4>
+        <p>Tratamento explícito e documentado. Nenhum <code class="mono">NaN</code>, nenhum encerramento.</p></div></div>
+      <div class="req"><div class="n">REQ-04</div><div><h4>Regra no domínio</h4>
+        <p>Kotlin puro, sem <code class="mono">import android.*</code>, sem conhecer JSON nem Context.</p></div></div>
+      <div class="req"><div class="n">REQ-05</div><div><h4>Tela de lista</h4>
+        <p>Todos os dispositivos, chip de status distinto, filtro com contagem por estado.</p></div></div>
+      <div class="req"><div class="n">REQ-06</div><div><h4>Detalhe com justificativa</h4>
+        <p>O texto nomeia o sinal responsável e o valor observado. Voltar preserva o filtro.</p></div></div>
+      <div class="req"><div class="n">REQ-07</div><div><h4>Favoritos persistentes</h4>
+        <p>Sobrevivem ao encerramento completo do processo.</p></div></div>
+      <div class="req"><div class="n">REQ-08</div><div><h4>Testes na JVM</h4>
+        <p>Unidade, registro incompleto e os dois lados de cada fronteira de limiar.</p></div></div>
+      <div class="req"><div class="n">REQ-09</div><div><h4>Integração contínua</h4>
+        <p>Análise estática e suíte de testes a cada push, verde na entrega.</p></div></div>
+      <div class="req"><div class="n">REQ-10</div><div><h4>Protocolo de decisões</h4>
+        <p>Regra adotada, tratamento dos defeitos e uma ameaça à validade da sua conclusão.</p></div></div>
+    </div>
+
+    <div class="card" style="margin-top:28px;border-color:rgba(242,180,65,.3)">
+      <span class="tag" style="color:var(--warn)">O requisito que mais revela maturidade</span>
+      <h3>A ameaça à validade</h3>
+      <p>É o item que a maioria trata como formalidade. Um exemplo do que se espera:
+      <em>"o dreno relativo assume que todo o consumo ocorreu com a tela ligada; em aparelhos com
+      serviço em primeiro plano e tela desligada a métrica superestima o dreno e pode gerar falso
+      Crítico."</em> Isso é conhecer o próprio instrumento.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ AVALIAÇÃO ═══════════════ -->
+<section class="band">
+  <div class="wrap band-inner">
+    <div class="eyebrow">07 — Avaliação</div>
+    <h2>Cem pontos, distribuídos pelo que o desafio mede.</h2>
+    <p class="lede">
+      Não é a quantidade de telas, nem o visual, nem o número de linhas. É a qualidade das
+      fronteiras e a honestidade das decisões registradas.
+    </p>
+
+    <div class="meters">
+      <div class="meter">
+        <div class="lb">Arquitetura e fronteiras<em>Camadas, inversão de dependência, SOLID</em></div>
+        <div class="track"><i style="width:100%;animation-delay:.05s"></i></div>
+        <div class="pt">25</div>
+      </div>
+      <div class="meter">
+        <div class="lb">Correção do domínio<em>Unidades, registros incompletos, limiares, precedência</em></div>
+        <div class="track"><i style="width:100%;animation-delay:.14s"></i></div>
+        <div class="pt">25</div>
+      </div>
+      <div class="meter">
+        <div class="lb">Interface e navegação<em>Lista, filtro, detalhe, justificativa, favoritos</em></div>
+        <div class="track"><i style="width:80%;animation-delay:.23s"></i></div>
+        <div class="pt">20</div>
+      </div>
+      <div class="meter">
+        <div class="lb">Testes e integração contínua<em>Testes que prendem comportamento, pipeline verde</em></div>
+        <div class="track"><i style="width:60%;animation-delay:.32s"></i></div>
+        <div class="pt">15</div>
+      </div>
+      <div class="meter">
+        <div class="lb">Documentação e justificativa<em>PROTOCOLO.md, README, histórico de commits</em></div>
+        <div class="track"><i style="width:60%;animation-delay:.41s"></i></div>
+        <div class="pt">15</div>
+      </div>
+      <div class="meter bonus">
+        <div class="lb">Trilha de especialização<em>Extensão opcional sobre o mesmo app</em></div>
+        <div class="track"><i style="width:80%;animation-delay:.5s"></i></div>
+        <div class="pt">+20</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:34px;border-color:rgba(255,107,107,.26)">
+      <span class="tag" style="color:var(--crit)">Condições que limitam a nota</span>
+      <p style="color:var(--text-2)">
+        <code class="mono">import android.*</code> dentro de <code class="mono">domain/</code>, ou
+        classificação escrita num <code class="mono">Composable</code>, zera o eixo de arquitetura.
+        Unidades não normalizadas, ou <code class="mono">NaN</code> num registro incompleto, zeram o
+        eixo de correção do domínio. CI vermelha, ou suíte que passa com qualquer implementação,
+        zera o eixo de testes. Ausência de <code class="mono">PROTOCOLO.md</code> limita o total a 60.
+      </p>
+      <p style="color:var(--text-3);margin-top:12px">
+        Nenhuma dessas é punição arbitrária: cada uma descreve um caso em que o eixo
+        correspondente simplesmente não pode ser avaliado.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TRILHAS ═══════════════ -->
+<section class="band">
+  <div class="wrap band-inner">
+    <div class="eyebrow">08 — Trilhas de especialização</div>
+    <h2>Extensões opcionais. Escolha no máximo uma.</h2>
+    <p class="lede">
+      Sinalizam afinidade, não compõem a nota mínima. São avaliadas pela profundidade de uma ideia,
+      não pela quantidade de código — e nenhuma substitui um requisito obrigatório.
+    </p>
+    <div class="three" style="margin-top:36px">
+      <div class="card track-card">
+        <span class="tag">Trilha A</span>
+        <h3>IA aplicada à otimização</h3>
+        <p>Uma segunda implementação da interface de classificação, orientada por dados em vez de
+        limiares fixos: percentil da frota, agrupamento, ou um modelo simples embarcado.</p>
+        <p style="color:var(--text-3)"><b style="color:var(--blue);font-weight:500">Avalia-se</b> a
+        comparação contra a linha de base. Uma regra de percentil bem justificada vence uma rede
+        neural sem comparação.</p>
+      </div>
+      <div class="card track-card b">
+        <span class="tag">Trilha B</span>
+        <h3>Segurança e automação</h3>
+        <p>Endurecer o manifest, garantir que nenhum identificador de dispositivo chegue ao log, e
+        escrever uma verificação automatizada que falhe o build quando uma dessas regras for violada.</p>
+        <p style="color:var(--text-3)"><b style="color:var(--warn);font-weight:500">Avalia-se</b> a
+        automação e o tratamento de um falso positivo — um verificador que grita em tudo é um
+        verificador que ninguém usa.</p>
+      </div>
+      <div class="card track-card c">
+        <span class="tag">Trilha C</span>
+        <h3>Eficiência energética</h3>
+        <p>Agendar a releitura com <code class="mono">WorkManager</code> e justificar a política
+        escolhida — frequência, restrições, comportamento em Doze — pelo custo energético estimado.</p>
+        <p style="color:var(--text-3)"><b style="color:var(--ok);font-weight:500">Avalia-se</b> a
+        justificativa quantitativa. E a pergunta: a recomendação muda quando você separa os
+        dispositivos por tier de SoC?</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ RODAPÉ ═══════════════ -->
+<footer>
+  <div class="wrap foot">
+    <div>
+      <div class="mono" style="margin-bottom:6px">SELDON FLEET · ESPECIFICAÇÃO v1.0 — REVISÃO A</div>
+      <div style="color:var(--text-3);font-size:14px">Residência Tecnológica · Módulo 1 — Núcleo Comum</div>
+    </div>
+    <a class="doc-link" href="desafio-tecnico.pdf" target="_blank" rel="noopener">
+      Especificação técnica completa <span>· PDF · 17 páginas</span>
+    </a>
+  </div>
+</footer>
+
+<script>
+/* ── campo 3D da frota ─────────────────────────────────────────────── */
+(function () {
+  var canvas = document.getElementById('scene');
+  if (!canvas || typeof THREE === 'undefined') return;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var host = canvas.parentElement;
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+  camera.position.set(0, 0, 11.4);
+
+  var fleet = new THREE.Group();
+  fleet.rotation.z = -0.22;
+  scene.add(fleet);
+
+  var PALETTE = [
+    { c: 0x3ecf8e, w: 15 }, // ok
+    { c: 0xf2b441, w: 6 },  // atenção
+    { c: 0xff6b6b, w: 3 },  // crítico
+    { c: 0x7a8aa0, w: 2 }   // sem dados
+  ];
+  var bag = [];
+  PALETTE.forEach(function (p) { for (var i = 0; i < p.w; i++) bag.push(p.c); });
+
+  var COUNT = 52, R = 4.15;
+  var panel = new THREE.BoxGeometry(0.46, 0.92, 0.055);
+  var panels = [];
+
+  for (var i = 0; i < COUNT; i++) {
+    // distribuição de Fibonacci: pontos uniformes sobre a esfera
+    var y = 1 - (i / (COUNT - 1)) * 2;
+    var r = Math.sqrt(Math.max(0, 1 - y * y));
+    var theta = Math.PI * (3 - Math.sqrt(5)) * i;
+    var color = bag[i % bag.length];
+
+    var mat = new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.82 });
+    var mesh = new THREE.Mesh(panel, mat);
+    mesh.position.set(Math.cos(theta) * r * R, y * R, Math.sin(theta) * r * R);
+    mesh.lookAt(0, 0, 0);
+    var s = 0.72 + ((i * 37) % 11) / 18;
+    mesh.scale.set(s, s, 1);
+    fleet.add(mesh);
+
+    var edge = new THREE.LineSegments(
+      new THREE.EdgesGeometry(panel),
+      new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: 0.5 })
+    );
+    edge.position.copy(mesh.position);
+    edge.quaternion.copy(mesh.quaternion);
+    edge.scale.copy(mesh.scale);
+    fleet.add(edge);
+
+    panels.push({ mesh: mesh, mat: mat, phase: (i % 17) / 17 * Math.PI * 2 });
+  }
+
+  var hull = new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(R + 0.6, 1)),
+    new THREE.LineBasicMaterial({ color: 0x29496f, transparent: true, opacity: 0.4 })
+  );
+  fleet.add(hull);
+
+  var ring = new THREE.Mesh(
+    new THREE.TorusGeometry(R + 1.5, 0.012, 6, 140),
+    new THREE.MeshBasicMaterial({ color: 0x4d93ff, transparent: true, opacity: 0.4 })
+  );
+  ring.rotation.x = Math.PI / 2.35;
+  scene.add(ring);
+
+  var ring2 = new THREE.Mesh(
+    new THREE.TorusGeometry(R + 2.25, 0.008, 6, 140),
+    new THREE.MeshBasicMaterial({ color: 0x4d93ff, transparent: true, opacity: 0.22 })
+  );
+  ring2.rotation.x = Math.PI / 1.7;
+  ring2.rotation.y = 0.4;
+  scene.add(ring2);
+
+  var mx = 0, my = 0, tx = 0, ty = 0;
+  window.addEventListener('pointermove', function (e) {
+    tx = (e.clientX / window.innerWidth - 0.5);
+    ty = (e.clientY / window.innerHeight - 0.5);
+  }, { passive: true });
+
+  function resize() {
+    var w = host.clientWidth, h = host.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.position.z = w < 760 ? 14.2 : 11.4;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  var t = 0, running = true;
+  document.addEventListener('visibilitychange', function () {
+    running = !document.hidden;
+    if (running && !reduce) requestAnimationFrame(loop);
+  });
+
+  function draw() {
+    mx += (tx - mx) * 0.045;
+    my += (ty - my) * 0.045;
+    fleet.rotation.y = t * 0.085 + mx * 0.5;
+    fleet.rotation.x = Math.sin(t * 0.21) * 0.1 + my * 0.32;
+    ring.rotation.z = t * 0.15;
+    ring2.rotation.z = -t * 0.1;
+    for (var i = 0; i < panels.length; i++) {
+      panels[i].mat.opacity = 0.64 + Math.sin(t * 1.25 + panels[i].phase) * 0.3;
+    }
+    renderer.render(scene, camera);
+  }
+
+  function loop() {
+    if (!running) return;
+    t += 0.0105;
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  if (reduce) { draw(); } else { requestAnimationFrame(loop); }
+})();
+
+/* ── demonstração da conversão de unidade ──────────────────────────── */
+(function () {
+  var btnRaw = document.getElementById('btnRaw');
+  var btnFix = document.getElementById('btnFix');
+  if (!btnRaw || !btnFix) return;
+
+  var elEnergy = document.getElementById('vEnergy');
+  var elAbs = document.getElementById('vAbs');
+  var elRel = document.getElementById('vRel');
+  var elPill = document.getElementById('vPill');
+  var elFoot = document.getElementById('demoFoot');
+
+  var CAP = 5000, MIN = 186, RAW = 3773, V = 3.85;
+
+  var STATE = {
+    raw: {
+      energy: RAW, unit: 'mAh',
+      abs: RAW / (MIN / 60),
+      rel: (RAW / (MIN / 60)) / CAP * 100,
+      pill: 'Crítico', cls: 'pill p-cr',
+      foot: '<b>O mesmo aparelho, o mesmo arquivo, o veredito oposto.</b> Tratar 3773 mWh como se fosse mAh infla o consumo em 3,85× e condena um dispositivo saudável. Não é arredondamento — é inversão de resultado.'
+    },
+    fix: {
+      energy: RAW / V, unit: 'mAh',
+      abs: (RAW / V) / (MIN / 60),
+      rel: ((RAW / V) / (MIN / 60)) / CAP * 100,
+      pill: 'OK', cls: 'pill p-ok',
+      foot: '<b>Com a conversão, o aparelho é saudável.</b> 3773 mWh ÷ 3,85 V = 980 mAh. O dreno cai para 6,3 %/h, abaixo do limiar de atenção. Nenhum sinal dispara.'
+    }
+  };
+
+  var current = null, anim = null;
+
+  function fmt(n, d) {
+    return n.toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
+  }
+
+  function paint(from, to, p) {
+    var e = from.energy + (to.energy - from.energy) * p;
+    var a = from.abs + (to.abs - from.abs) * p;
+    var r = from.rel + (to.rel - from.rel) * p;
+    elEnergy.innerHTML = fmt(e, 0) + '<span class="u">' + to.unit + '</span>';
+    elAbs.innerHTML = fmt(a, 1) + '<span class="u">mAh/h</span>';
+    elRel.innerHTML = fmt(r, 1) + '<span class="u">%/h</span>';
+  }
+
+  function set(key, animate) {
+    var to = STATE[key];
+    var from = current || to;
+    current = to;
+    btnRaw.setAttribute('aria-pressed', String(key === 'raw'));
+    btnFix.setAttribute('aria-pressed', String(key === 'fix'));
+    elPill.className = to.cls;
+    elPill.style.fontSize = '12px';
+    elPill.style.padding = '6px 10px';
+    elPill.textContent = to.pill;
+    elFoot.innerHTML = to.foot;
+    elEnergy.classList.toggle('lit', key === 'fix');
+
+    if (anim) cancelAnimationFrame(anim);
+    if (!animate || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      paint(to, to, 1); return;
+    }
+    var t0 = performance.now(), dur = 520;
+    (function step(now) {
+      var p = Math.min(1, (now - t0) / dur);
+      var e = 1 - Math.pow(1 - p, 3);
+      paint(from, to, e);
+      if (p < 1) anim = requestAnimationFrame(step);
+    })(t0);
+  }
+
+  btnRaw.addEventListener('click', function () { set('raw', true); });
+  btnFix.addEventListener('click', function () { set('fix', true); });
+  set('raw', false);
+})();
+
+/* ── paralaxe suave das camadas ────────────────────────────────────── */
+(function () {
+  var host = document.getElementById('stack');
+  var inner = document.getElementById('stackIn');
+  if (!host || !inner) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var rx = 56, rz = -38, ticking = false;
+  host.addEventListener('pointermove', function (e) {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      var b = host.getBoundingClientRect();
+      var dx = (e.clientX - b.left) / b.width - 0.5;
+      var dy = (e.clientY - b.top) / b.height - 0.5;
+      inner.style.transform = 'rotateX(' + (rx - dy * 16) + 'deg) rotateZ(' + (rz + dx * 18) + 'deg)';
+      ticking = false;
+    });
+  }, { passive: true });
+  host.addEventListener('pointerleave', function () {
+    inner.style.transform = 'rotateX(' + rx + 'deg) rotateZ(' + rz + 'deg)';
+  });
+})();
+</script>
