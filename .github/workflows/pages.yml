@@ -1,8 +1,13 @@
 name: Publicar o site do desafio
 
+# O ambiente github-pages só aceita deploy a partir da branch default do
+# repositório. Hoje a default é ccr-5b59ccd5-6yjr77, não main: uma execução
+# disparada em main é recusada pelo ambiente antes de alocar runner, sem log.
+# As duas branches ficam listadas para que o deploy continue funcionando se a
+# default mudar.
 on:
   push:
-    branches: [main]
+    branches: [ccr-5b59ccd5-6yjr77, main]
   workflow_dispatch:
 
 permissions:
