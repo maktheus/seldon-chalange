@@ -16,7 +16,6 @@
   --text-2:#9bb0c7;
   --text-3:#60788f;
   --blue:#4d93ff;
-  --blue-deep:#1b4f9c;
   --ok:#3ecf8e;
   --warn:#f2b441;
   --crit:#ff6b6b;
@@ -48,14 +47,14 @@ p{margin:0 0 14px}
 a{color:var(--blue);text-decoration:none}
 a:hover{text-decoration:underline}
 :focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:3px}
+code{font-family:var(--mono);font-size:.92em;color:#a9c8ee}
 
 .eyebrow{
   font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
   color:var(--blue);display:flex;align-items:center;gap:10px;margin-bottom:18px;
 }
 .eyebrow::before{content:"";width:28px;height:1px;background:var(--blue);flex:none}
-.lede{color:var(--text-2);font-size:18px;max-width:62ch;margin-top:14px}
-.mono{font-family:var(--mono)}
+.lede{color:var(--text-2);font-size:18px;max-width:64ch;margin-top:14px}
 .tnum{font-variant-numeric:tabular-nums}
 
 /* ───────────────── hero ───────────────── */
@@ -67,11 +66,8 @@ a:hover{text-decoration:underline}
     linear-gradient(to bottom,rgba(5,9,15,.72) 0%,rgba(5,9,15,.35) 42%,rgba(5,9,15,.94) 100%),
     linear-gradient(to right,rgba(5,9,15,.9) 0%,rgba(5,9,15,.1) 55%,transparent 100%);
 }
-.hero-inner{position:relative;z-index:2;padding-block:92px 76px}
-.hero h1{
-  font-size:clamp(52px,10vw,118px);line-height:.88;letter-spacing:-.035em;
-  margin:0 0 6px;
-}
+.hero-inner{position:relative;z-index:2;padding-block:88px 72px}
+.hero h1{font-size:clamp(52px,10vw,118px);line-height:.88;letter-spacing:-.035em;margin:0 0 6px}
 .hero h1 span{display:block;color:var(--blue)}
 .hero-sub{
   font-family:var(--cond);font-weight:600;font-size:clamp(17px,2.4vw,23px);
@@ -92,10 +88,7 @@ a:hover{text-decoration:underline}
   display:flex;align-items:center;gap:10px;margin-top:44px;
   font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);
 }
-.scroll-cue i{
-  width:1px;height:26px;background:linear-gradient(to bottom,var(--blue),transparent);
-  animation:drop 2.4s ease-in-out infinite;transform-origin:top;
-}
+.scroll-cue i{width:1px;height:26px;background:linear-gradient(to bottom,var(--blue),transparent);animation:drop 2.4s ease-in-out infinite;transform-origin:top}
 @keyframes drop{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
 
 /* ───────────────── blocos ───────────────── */
@@ -113,15 +106,26 @@ a:hover{text-decoration:underline}
 .card p{color:var(--text-2);font-size:15px;margin-bottom:0}
 .card p + p{margin-top:10px}
 
+/* ───────────────── listas de estudo ───────────────── */
+.links{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);border-radius:9px;overflow:hidden}
+.links li{background:var(--ink)}
+.links a{
+  display:grid;grid-template-columns:1fr auto;gap:8px 16px;align-items:baseline;
+  padding:13px 16px;color:var(--text);text-decoration:none;transition:background .2s;min-width:0;
+}
+.links a:hover{background:var(--panel-2);text-decoration:none}
+.links .nm{font-size:15px;font-weight:500;min-width:0}
+.links .why{display:block;font-size:13px;color:var(--text-3);font-weight:400;margin-top:2px;line-height:1.45}
+.links .src{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);white-space:nowrap}
+.links a:hover .src{color:var(--blue)}
+.study{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:38px}
+.study h3{font-size:18px}
+.study .hint{font-size:14px;color:var(--text-2);margin:8px 0 0}
+
 /* ───────────────── telefones ───────────────── */
-.phones{
-  display:flex;gap:44px;justify-content:center;align-items:flex-start;flex-wrap:wrap;
-  margin-top:46px;perspective:1600px;
-}
+.phones{display:flex;gap:44px;justify-content:center;align-items:flex-start;flex-wrap:wrap;margin-top:46px;perspective:1600px}
 .phone-slot{display:flex;flex-direction:column;align-items:center;gap:16px;min-width:0}
-.phone-cap{
-  font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3);
-}
+.phone-cap{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3)}
 .phone-cap b{color:var(--blue);font-weight:500}
 .phone{
   width:300px;max-width:100%;height:600px;border-radius:30px;
@@ -133,20 +137,14 @@ a:hover{text-decoration:underline}
 }
 .phone.right{transform:rotateY(-9deg) rotateX(3deg)}
 .phone:hover,.phone.right:hover{transform:rotateY(0) rotateX(0) translateY(-6px)}
-.screen{
-  width:100%;height:100%;border-radius:22px;background:#0a1018;
-  overflow:hidden;position:relative;display:flex;flex-direction:column;
-}
-.screen::after{ /* varredura de instrumentação */
+.screen{width:100%;height:100%;border-radius:22px;background:#0a1018;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.screen::after{
   content:"";position:absolute;left:0;right:0;height:120px;top:-120px;z-index:4;pointer-events:none;
   background:linear-gradient(to bottom,transparent,rgba(77,147,255,.09),transparent);
   animation:sweep 6.5s linear infinite;
 }
 @keyframes sweep{0%{top:-120px}100%{top:620px}}
-.sysbar{
-  display:flex;justify-content:space-between;align-items:center;flex:none;
-  padding:9px 16px 5px;font-family:var(--mono);font-size:10px;color:var(--text-3);
-}
+.sysbar{display:flex;justify-content:space-between;align-items:center;flex:none;padding:9px 16px 5px;font-family:var(--mono);font-size:10px;color:var(--text-3)}
 .appbar{flex:none;padding:6px 16px 12px;border-bottom:1px solid #16222f}
 .appbar h4{margin:0;font-family:var(--cond);font-size:19px;font-weight:700;letter-spacing:-.01em}
 .appbar .sub{font-family:var(--mono);font-size:10px;color:var(--text-3);letter-spacing:.08em;margin-top:2px}
@@ -155,17 +153,10 @@ a:hover{text-decoration:underline}
   -webkit-mask-image:linear-gradient(to right,#000 80%,transparent 100%);
   mask-image:linear-gradient(to right,#000 80%,transparent 100%);
 }
-.filters b{
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;font-weight:500;
-  padding:4px 8px;border-radius:20px;border:1px solid #223449;color:var(--text-2);white-space:nowrap;
-}
+.filters b{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;font-weight:500;padding:4px 8px;border-radius:20px;border:1px solid #223449;color:var(--text-2);white-space:nowrap}
 .filters b.on{background:rgba(77,147,255,.16);border-color:var(--blue);color:#cfe1ff}
 .rows{flex:1;overflow:hidden;padding:2px 10px 10px}
-.row{
-  display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
-  padding:11px 10px;border-radius:9px;border:1px solid transparent;
-  animation:land .7s cubic-bezier(.2,.8,.3,1) both;
-}
+.row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:11px 10px;border-radius:9px;border:1px solid transparent;animation:land .7s cubic-bezier(.2,.8,.3,1) both}
 .row:nth-child(1){animation-delay:.05s}
 .row:nth-child(2){animation-delay:.13s}
 .row:nth-child(3){animation-delay:.21s}
@@ -177,26 +168,18 @@ a:hover{text-decoration:underline}
 .row .id{font-family:var(--mono);font-size:12.5px;color:var(--text);letter-spacing:.02em}
 .row .mdl{font-size:11.5px;color:var(--text-3);margin-top:1px}
 .row .bat{font-family:var(--mono);font-size:11px;color:var(--text-2);display:block;text-align:right;margin-bottom:5px}
-.pill{
-  font-family:var(--mono);font-size:8.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
-  padding:3px 7px;border-radius:3px;border:1px solid currentColor;white-space:nowrap;display:inline-block;
-}
+.pill{font-family:var(--mono);font-size:8.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:3px;border:1px solid currentColor;white-space:nowrap;display:inline-block}
 .p-ok{color:var(--ok);background:rgba(62,207,142,.1)}
 .p-wa{color:var(--warn);background:rgba(242,180,65,.1)}
 .p-cr{color:var(--crit);background:rgba(255,107,107,.1)}
 .p-vo{color:var(--grey);background:rgba(122,138,160,.1)}
 .p-cr.beat{animation:beat 2.6s ease-in-out infinite}
 @keyframes beat{0%,100%{box-shadow:0 0 0 0 rgba(255,107,107,0)}50%{box-shadow:0 0 0 4px rgba(255,107,107,.13)}}
-
-/* tela de detalhe */
 .det{flex:1;overflow:hidden;padding:4px 16px 16px}
 .det .back{font-family:var(--mono);font-size:11px;color:var(--blue);margin-bottom:12px;display:block}
 .det .big{font-family:var(--cond);font-size:26px;font-weight:700;line-height:1.05;letter-spacing:-.01em}
 .det .mdl2{font-size:12px;color:var(--text-3);margin:2px 0 14px}
-.verdict{
-  border:1px solid rgba(255,107,107,.35);background:rgba(255,107,107,.07);
-  border-radius:9px;padding:12px 13px;margin-bottom:16px;
-}
+.verdict{border:1px solid rgba(255,107,107,.35);background:rgba(255,107,107,.07);border-radius:9px;padding:12px 13px;margin-bottom:16px}
 .verdict .vt{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--crit);margin-bottom:6px}
 .verdict p{font-size:12.5px;line-height:1.5;color:#ffd9d9;margin:0}
 .verdict p b{color:#fff;font-weight:600}
@@ -206,57 +189,35 @@ a:hover{text-decoration:underline}
 .specs dd{margin:0;font-family:var(--mono);font-size:12.5px;color:var(--text)}
 .specs dd small{color:var(--text-3);font-size:10px}
 .det-foot{margin-top:16px;display:flex;flex-direction:column;gap:9px}
-.det-foot .fav{
-  font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--warn);
-  border:1px solid rgba(242,180,65,.35);background:rgba(242,180,65,.08);
-  border-radius:7px;padding:10px 11px;text-align:center;
-}
+.det-foot .fav{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--warn);border:1px solid rgba(242,180,65,.35);background:rgba(242,180,65,.08);border-radius:7px;padding:10px 11px;text-align:center}
 .det-foot .seen{font-family:var(--mono);font-size:10px;color:var(--text-3);letter-spacing:.08em;text-align:center}
 
 /* ───────────────── camadas 3d ───────────────── */
-.stack{
-  perspective:1300px;display:flex;justify-content:center;
-  padding:46px 0 10px;min-height:330px;
-}
+.stack{perspective:1300px;display:flex;justify-content:center;padding:46px 0 10px;min-height:330px}
 .stack-in{transform-style:preserve-3d;transform:rotateX(56deg) rotateZ(-38deg);position:relative;width:300px;height:170px}
 .layer{
   position:absolute;inset:0;border-radius:8px;border:1px solid var(--line);
   background:linear-gradient(135deg,rgba(19,34,53,.95),rgba(10,17,28,.9));
   display:flex;flex-direction:column;justify-content:center;padding:16px 18px;
-  box-shadow:0 20px 40px -24px rgba(0,0,0,.9);
-  animation:hover 7s ease-in-out infinite;
+  box-shadow:0 20px 40px -24px rgba(0,0,0,.9);animation:hover 7s ease-in-out infinite;
 }
 .layer .lname{font-family:var(--mono);font-size:13px;color:var(--text);letter-spacing:.06em}
 .layer .lnote{font-size:11px;color:var(--text-3);margin-top:3px;line-height:1.35}
 .l-ui{transform:translateZ(120px);animation-delay:0s;border-color:rgba(122,138,160,.35)}
 .l-data{transform:translateZ(60px);animation-delay:.5s;border-color:rgba(122,138,160,.35)}
-.l-dom{
-  transform:translateZ(0);animation-delay:1s;
-  border-color:var(--blue);box-shadow:0 0 44px -6px rgba(77,147,255,.4);
-  background:linear-gradient(135deg,rgba(27,63,111,.95),rgba(10,20,34,.95));
-}
+.l-dom{transform:translateZ(0);animation-delay:1s;border-color:var(--blue);box-shadow:0 0 44px -6px rgba(77,147,255,.4);background:linear-gradient(135deg,rgba(27,63,111,.95),rgba(10,20,34,.95))}
 @keyframes hover{0%,100%{margin-top:0}50%{margin-top:-7px}}
 .dep{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:8px}
 .dep .txt{font-family:var(--mono);font-size:11.5px;color:var(--text-2);letter-spacing:.06em;text-align:center}
 .dep .txt b{color:var(--blue);font-weight:500}
 
 /* ───────────────── demo de unidade ───────────────── */
-.demo{
-  border:1px solid var(--line);border-radius:12px;overflow:hidden;
-  background:linear-gradient(180deg,var(--panel) 0%,var(--ink) 100%);margin-top:36px;
-}
-.demo-head{
-  display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;
-  padding:16px 22px;border-bottom:1px solid var(--line-soft);
-}
+.demo{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:linear-gradient(180deg,var(--panel) 0%,var(--ink) 100%);margin-top:36px}
+.demo-head{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--line-soft)}
 .demo-head .t{font-family:var(--mono);font-size:12px;color:var(--text-2);letter-spacing:.06em}
 .demo-head .t b{color:var(--text);font-weight:500}
 .toggle{display:flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
-.toggle button{
-  font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
-  background:transparent;border:0;color:var(--text-3);padding:9px 14px;cursor:pointer;
-  transition:background .25s,color .25s;
-}
+.toggle button{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:transparent;border:0;color:var(--text-3);padding:9px 14px;cursor:pointer;transition:background .25s,color .25s}
 .toggle button[aria-pressed="true"]{background:rgba(77,147,255,.18);color:#d6e6ff}
 .demo-body{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-soft)}
 .cell{background:var(--ink);padding:20px 18px;min-width:0}
@@ -268,11 +229,7 @@ a:hover{text-decoration:underline}
 .demo-foot b{color:var(--text);font-weight:600}
 
 /* ───────────────── código ───────────────── */
-.code{
-  background:#070d16;border:1px solid var(--line-soft);border-radius:10px;
-  padding:20px 22px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.72;
-  color:#c7d6e8;white-space:pre;
-}
+.code{background:#070d16;border:1px solid var(--line-soft);border-radius:10px;padding:20px 22px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.72;color:#c7d6e8;white-space:pre}
 .code .k{color:#7fb2ff}.code .s{color:#8ee6ae}.code .n{color:#f2b441}.code .c{color:#5b7390;font-style:italic}
 .code mark{background:rgba(255,107,107,.17);color:#ffb3b3;border-radius:2px;padding:1px 3px}
 
@@ -298,30 +255,26 @@ a:hover{text-decoration:underline}
 
 /* ───────────────── trilhas ───────────────── */
 .track-card{position:relative;overflow:hidden}
-.track-card::before{
-  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue);
-}
+.track-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue)}
 .track-card.b::before{background:var(--warn)}
 .track-card.c::before{background:var(--ok)}
 
 /* ───────────────── rodapé ───────────────── */
 footer{border-top:1px solid var(--line-soft);background:#04070c}
 .foot{display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:center;padding-block:36px}
-.foot .mono{font-size:12px;color:var(--text-3);letter-spacing:.06em}
-.doc-link{
-  display:inline-flex;align-items:center;gap:11px;border:1px solid var(--line);
-  border-radius:8px;padding:13px 18px;color:var(--text);font-family:var(--mono);
-  font-size:12.5px;letter-spacing:.06em;background:var(--panel);transition:border-color .25s,background .25s;
-}
+.foot .mono{font-family:var(--mono);font-size:12px;color:var(--text-3);letter-spacing:.06em}
+.doc-link{display:inline-flex;align-items:center;gap:11px;border:1px solid var(--line);border-radius:8px;padding:13px 18px;color:var(--text);font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;background:var(--panel);transition:border-color .25s,background .25s}
 .doc-link:hover{border-color:var(--blue);background:var(--panel-2);text-decoration:none}
 .doc-link span{color:var(--text-3)}
 
 @media (max-width:900px){
-  .two,.three,.reqs,.demo-body{grid-template-columns:1fr}
+  .two,.three,.reqs,.demo-body,.study{grid-template-columns:1fr}
   .band-inner{padding-block:56px}
   .meter{grid-template-columns:1fr 46px;gap:8px 14px}
   .meter .track{grid-column:1 / -1}
   .phones{gap:30px}
+  .links a{grid-template-columns:1fr}
+  .links .src{grid-row:1}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -336,62 +289,67 @@ footer{border-top:1px solid var(--line-soft);background:#04070c}
     <h1>Seldon<span>Fleet</span></h1>
     <div class="hero-sub">Desafio técnico de engenharia Android</div>
     <p class="hero-sentence">
-      Construir um app Android em <b>Kotlin/Compose</b> de duas telas que lê um
+      Você vai construir um app Android em <b>Kotlin/Compose</b> de duas telas que lê um
       <b>frota.json</b> local, lista os dispositivos classificando cada um como
       <b>OK</b>, <b>Atenção</b> ou <b>Crítico</b> por uma regra de negócio isolada em
       <b>domain/</b> e testável na JVM, abre o detalhe com a justificativa da classificação
       e persiste os favoritos — tratando os dados defeituosos do arquivo e documentando
-      as decisões.
+      as suas decisões.
     </p>
     <div class="chips">
       <span>Kotlin</span><span>Jetpack Compose</span><span>Camadas</span>
       <span>Testes JVM</span><span>Integração contínua</span><span>Sem rede</span>
     </div>
-    <div class="scroll-cue"><i></i> Role para a especificação</div>
+    <div class="scroll-cue"><i></i> Comece pela seção 01</div>
   </div>
 </header>
 
-<!-- ═══════════════ A MISSÃO ═══════════════ -->
+<!-- ═══════════════ 01 — COMO LER ═══════════════ -->
 <section class="band">
   <div class="wrap band-inner">
-    <div class="eyebrow">01 — A missão</div>
-    <h2>Uma frota responde.<br>Alguém precisa decidir o que ela diz.</h2>
+    <div class="eyebrow">01 — Como usar esta página</div>
+    <h2>Leia tudo antes de abrir o Android Studio.</h2>
     <p class="lede">
-      Você recebe o dump de telemetria de uma frota de aparelhos Android: um único arquivo,
-      cerca de trinta dispositivos, nenhuma rede. Seu app lê esse arquivo, decide o estado de
-      saúde de cada aparelho e apresenta o veredito de forma que outra pessoa consiga conferir.
+      Esta página descreve o que construir, quais decisões você terá de tomar e onde estudar
+      cada parte. Os links de estudo estão na seção 06, agrupados pela parte do app que servem,
+      e todos apontam para documentação oficial.
     </p>
     <div class="three" style="margin-top:38px">
       <div class="card">
-        <span class="tag">O que entra</span>
-        <h3>Um arquivo, e só</h3>
-        <p><code class="mono">assets/frota.json</code> — a fonte da verdade. Sem HTTP, sem login,
-        sem banco relacional. Toda a dificuldade está no conteúdo do arquivo, não em alcançá-lo.</p>
+        <span class="tag">Ordem sugerida de leitura</span>
+        <h3>Especificação, depois código</h3>
+        <p>Seções 02 a 05 descrevem o problema. A seção 06 lista o material de estudo. A 07 traz
+        os dez requisitos e a 08 explica como a entrega é avaliada. O PDF no rodapé contém a
+        especificação completa, com os critérios de aceitação de cada requisito.</p>
       </div>
       <div class="card">
-        <span class="tag">O que acontece no meio</span>
-        <h3>Uma decisão computada</h3>
-        <p>Cada dispositivo recebe um status a partir do seu consumo, dos quadros perdidos e das
-        falhas recentes. Essa decisão é a única regra de negócio do app — e ela tem endereço fixo.</p>
+        <span class="tag">Pré-requisitos</span>
+        <h3>O que você precisa ter instalado</h3>
+        <p>Android Studio com o SDK recente, JDK 17 e uma conta no GitHub. Não é necessário
+        aparelho físico: o app roda no emulador, e os testes rodam na JVM com
+        <code>./gradlew test</code>, sem emulador nenhum.</p>
       </div>
       <div class="card">
-        <span class="tag">O que sai</span>
-        <h3>Um veredito justificado</h3>
-        <p>A tela de detalhe não mostra apenas o status: mostra <em>por que</em>, citando o valor que
-        disparou a classificação. Resultado sem justificativa não é resultado.</p>
+        <span class="tag">Se você nunca fez Android</span>
+        <h3>Por onde começar</h3>
+        <p>Faça primeiro as duas primeiras unidades do curso Android Basics with Compose
+        (link na seção 06). Elas cobrem Kotlin básico, a primeira tela em Compose e o ciclo
+        de build — que é o suficiente para começar a seção 02.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ O APP ═══════════════ -->
+<!-- ═══════════════ 02 — O APP ═══════════════ -->
 <section class="band">
   <div class="wrap band-inner">
-    <div class="eyebrow">02 — A interface</div>
-    <h2>Duas telas. Nada de enfeite.</h2>
+    <div class="eyebrow">02 — O que construir</div>
+    <h2>Duas telas, um arquivo de entrada.</h2>
     <p class="lede">
-      Uma lista que deixa o estado da frota visível de relance, e um detalhe que explica a
-      decisão. Esta é uma referência de intenção, não um layout a ser copiado pixel a pixel.
+      O app recebe a telemetria de uma frota de aparelhos Android em um único arquivo
+      <code>assets/frota.json</code>, com cerca de trinta dispositivos. Ele lê esse arquivo,
+      decide o estado de saúde de cada aparelho e mostra o resultado. Não há rede, não há login,
+      não há banco de dados.
     </p>
 
     <div class="phones">
@@ -468,74 +426,44 @@ footer{border-top:1px solid var(--line-soft);background:#04070c}
         <div class="phone-cap"><b>Tela 2</b> — detalhe com a justificativa do status</div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ═══════════════ ARQUITETURA ═══════════════ -->
-<section class="band">
-  <div class="wrap band-inner">
-    <div class="eyebrow">03 — A restrição</div>
-    <h2>As dependências apontam para dentro.</h2>
-    <p class="lede">
-      Três camadas e uma única regra. <code class="mono">ui</code> conhece
-      <code class="mono">domain</code>. <code class="mono">data</code> conhece
-      <code class="mono">domain</code>. E <code class="mono">domain</code> não conhece ninguém.
-    </p>
-
-    <div class="stack" id="stack">
-      <div class="stack-in" id="stackIn">
-        <div class="layer l-ui">
-          <div class="lname">ui/</div>
-          <div class="lnote">Compose · ViewModel · navegação</div>
-        </div>
-        <div class="layer l-data">
-          <div class="lname">data/</div>
-          <div class="lnote">JSON · DataStore · Android</div>
-        </div>
-        <div class="layer l-dom">
-          <div class="lname">domain/</div>
-          <div class="lnote">Device · DeviceStatus · ClassifyDevice<br>Kotlin puro — zero import android.*</div>
-        </div>
-      </div>
-    </div>
-    <div class="dep">
-      <div class="txt">ui ──▶ <b>domain</b> ◀── data<br>
-        <span style="color:var(--text-3)">domain declara a interface; data a implementa</span></div>
-    </div>
 
     <div class="two" style="margin-top:44px">
       <div class="card">
-        <span class="tag">Por que não é burocracia</span>
-        <h3>Isso é o que mantém o teste em milissegundos</h3>
-        <p>Alistair Cockburn formulou a arquitetura hexagonal em 2005 porque estava cansado de
-        suítes que exigiam banco, servidor e interface de pé para verificar uma regra de três linhas.
-        Robert Martin reempacotou o princípio como Clean Architecture em 2012.</p>
-        <p>Consequência direta aqui: a sua regra roda com <code class="mono">./gradlew test</code>,
-        na JVM, sem emulador. Se para testá-la você precisa de um <code class="mono">Context</code>,
-        ela está na camada errada — e isso é visível em dez segundos de leitura.</p>
+        <span class="tag">Tela 1 · o que ela precisa fazer</span>
+        <h3>Lista da frota</h3>
+        <p>Mostrar todos os dispositivos do arquivo, cada um com identificador, modelo, nível de
+        bateria e um chip de status visualmente distinto. Oferecer filtro por status, com a
+        contagem de cada estado. Permitir marcar e desmarcar um favorito.</p>
       </div>
       <div class="card">
-        <span class="tag">Como isso é verificado</span>
-        <h3>Dois comandos e uma substituição</h3>
-        <p><code class="mono">grep -r "import android" domain/</code> não pode retornar nada.
-        <code class="mono">./gradlew test</code> precisa passar sem emulador.</p>
-        <p>E trocar a implementação de <code class="mono">DeviceRepository</code> por uma de teste
-        deve exigir zero alteração em <code class="mono">domain/</code>. Classificação escrita dentro
-        de um <code class="mono">Composable</code> ou do parser zera o eixo de arquitetura na rubrica.</p>
+        <span class="tag">Tela 2 · o que ela precisa fazer</span>
+        <h3>Detalhe do dispositivo</h3>
+        <p>Abrir por navegação a partir da lista, com o botão voltar do sistema retornando ao
+        filtro que estava aplicado. Mostrar os atributos do aparelho com o consumo já normalizado,
+        e a frase que explica a classificação citando o valor que a disparou.</p>
       </div>
+    </div>
+
+    <div class="card" style="margin-top:20px">
+      <span class="tag">Fora de escopo</span>
+      <p style="color:var(--text-2)">
+        Sem chamadas HTTP, sem autenticação, sem Room ou SQLite, sem telas adicionais. Os favoritos
+        cabem em <code>DataStore</code>. O <code>frota.json</code> é a fonte da verdade e é relido a
+        cada abertura do app — não precisa ser copiado para lugar nenhum.
+      </p>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ DADOS / ARMADILHAS ═══════════════ -->
+<!-- ═══════════════ 03 — DADOS ═══════════════ -->
 <section class="band">
   <div class="wrap band-inner">
-    <div class="eyebrow">04 — Os dados</div>
-    <h2>O arquivo não vem limpo. De propósito.</h2>
+    <div class="eyebrow">03 — O arquivo de entrada</div>
+    <h2>O <code>frota.json</code> tem dois defeitos. Eles fazem parte do exercício.</h2>
     <p class="lede">
-      Um arquivo limpo não mede nada: todo mundo entrega a mesma lista bonita e o instrumento
-      não separa ninguém. Dois defeitos foram deixados no <code class="mono">frota.json</code>,
-      e a rubrica os pontua.
+      Dados reais chegam inconsistentes, e tratar essa inconsistência é parte do trabalho de
+      quem escreve a camada de dados. Os dois defeitos abaixo estão documentados aqui de
+      propósito: você precisa encontrá-los no arquivo, decidir o que fazer e registrar a decisão.
     </p>
 
     <div class="code" style="margin-top:32px"><span class="c">// registro normal — unidade em mAh</span>
@@ -546,11 +474,10 @@ footer{border-top:1px solid var(--line-soft);background:#04070c}
 <span class="k">{</span> <span class="k">"id"</span>: <span class="s">"DEV-0204"</span>, <span class="k">"batteryCapacityMah"</span>: <span class="n">5000</span>, <span class="k">"screenOnMinutes"</span>: <span class="n">186</span>,
   <span class="k">"energyConsumed"</span>: <span class="n">3773</span>, <span class="k">"energyUnit"</span>: <mark>"mWh"</mark>, <span class="k">"nominalVoltage"</span>: <span class="n">3.85</span> <span class="k">}</span>
 
-<span class="c">// DEFEITO 2 — divisor nulo esperando o momento certo</span>
+<span class="c">// DEFEITO 2 — divisor nulo nas derivadas da seção 04</span>
 <span class="k">{</span> <span class="k">"id"</span>: <span class="s">"DEV-0311"</span>, <span class="k">"batteryCapacityMah"</span>: <mark>0</mark>, <span class="k">"screenOnMinutes"</span>: <span class="n">97</span>,
   <span class="k">"energyConsumed"</span>: <span class="n">612</span>, <span class="k">"energyUnit"</span>: <span class="s">"mAh"</span>, <span class="k">"nominalVoltage"</span>: <span class="n">3.8</span> <span class="k">}</span></div>
 
-    <!-- demo interativa -->
     <div class="demo">
       <div class="demo-head">
         <div class="t">DEV-0204 · <b>Galaxy A54</b> · 5000 mAh · 186 min de tela · 3773 mWh</div>
@@ -578,45 +505,48 @@ footer{border-top:1px solid var(--line-soft);background:#04070c}
         </div>
       </div>
       <div class="demo-foot" id="demoFoot">
-        <b>O mesmo aparelho, o mesmo arquivo, o veredito oposto.</b> Tratar 3773 mWh como se fosse
-        mAh infla o consumo em 3,85× e condena um dispositivo saudável. Não é arredondamento — é
-        inversão de resultado.
+        <b>Compare os dois botões acima.</b> Tratar 3773 mWh como se fosse mAh multiplica o consumo
+        por 3,85 e classifica como Crítico um aparelho saudável. A diferença não é de arredondamento:
+        é de resultado.
       </div>
     </div>
 
     <div class="two" style="margin-top:34px">
       <div class="card">
-        <span class="tag">Defeito 1 — precedente histórico</span>
-        <h3>Mars Climate Orbiter, 1999</h3>
-        <p>A sonda foi perdida porque um módulo de software produzia impulso em libra-força·segundo
-        e o outro consumia em newton·segundo. Ninguém escreveu código errado; os dois lados estavam
-        corretos sob suposições diferentes.</p>
-        <p>Unidade não é detalhe de apresentação. É cláusula de contrato entre componentes — e
-        contrato não declarado é contrato violado mais cedo ou mais tarde.</p>
+        <span class="tag">Defeito 1 · o que fazer</span>
+        <h3>Converter antes de comparar</h3>
+        <p>Parte dos registros traz <code>energyConsumed</code> em mAh e parte em mWh. A conversão
+        usa a tensão nominal: <code>mAh = mWh ÷ nominalVoltage</code>. No exemplo,
+        3773 ÷ 3,85 = 980 mAh.</p>
+        <p>Converta na camada de dados, ao mapear o JSON para o modelo de domínio. O domínio deve
+        receber apenas mAh — assim a regra de classificação não precisa saber que existe mWh.
+        É o mesmo princípio que levou à perda da sonda Mars Climate Orbiter em 1999: um módulo
+        produzia impulso em libra-força·segundo, o outro consumia em newton·segundo, e nenhum dos
+        dois declarava a unidade na fronteira.</p>
       </div>
       <div class="card">
-        <span class="tag">Defeito 2 — a decisão que você precisa tomar</span>
+        <span class="tag">Defeito 2 · o que decidir</span>
         <h3>O divisor nulo</h3>
-        <p>Capacidade <code class="mono">0</code> e tempo de tela <code class="mono">0</code> aparecem
-        como divisor nas derivadas. Há três respostas defensáveis — classificar como indeterminado,
-        excluir da lista, ou falhar explicitamente na ingestão.</p>
-        <p>E uma resposta errada: exibir <code class="mono">NaN</code>, <code class="mono">Infinity</code>,
-        um número inventado, ou deixar o app encerrar. O que a rubrica exige é que a sua escolha
-        esteja escrita <em>antes</em> de ter sido conveniente.</p>
+        <p>Pelo menos um registro tem <code>batteryCapacityMah</code> igual a zero ou ausente, e
+        pelo menos um tem <code>screenOnMinutes</code> igual a zero. Os dois aparecem como divisor
+        nas derivadas da seção 04.</p>
+        <p>Três saídas são aceitas: classificar como indeterminado, excluir da lista, ou falhar
+        explicitamente na ingestão. Não são aceitos <code>NaN</code>, <code>Infinity</code>, valor
+        arbitrário silencioso, nem o app encerrar. Escreva no <code>PROTOCOLO.md</code> qual você
+        escolheu e por quê.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ REGRA ═══════════════ -->
+<!-- ═══════════════ 04 — A REGRA ═══════════════ -->
 <section class="band">
   <div class="wrap band-inner">
-    <div class="eyebrow">05 — A regra de referência</div>
-    <h2>Quatro estados, avaliados em ordem.</h2>
+    <div class="eyebrow">04 — A regra de classificação</div>
+    <h2>Quatro estados, avaliados nesta ordem.</h2>
     <p class="lede">
-      Os limiares abaixo são uma referência, não um dogma. Você pode propor outros — por percentil
-      da frota, por tier de SoC, por combinação ponderada. A exigência é que a regra adotada esteja
-      declarada <em>antes</em> dos resultados.
+      Calcule as duas derivadas depois de normalizar as unidades. O primeiro estado cuja condição
+      for satisfeita é o estado do dispositivo.
     </p>
 
     <div class="reqs reqs-4">
@@ -642,75 +572,341 @@ footer{border-top:1px solid var(--line-soft);background:#04070c}
       </div>
     </div>
 
-    <div class="two" style="margin-top:30px">
+    <div class="three" style="margin-top:30px">
       <div class="card">
-        <span class="tag">A grandeza comparável</span>
-        <h3>Dreno relativo, não absoluto</h3>
-        <p><code class="mono">dreno %/h = (mAh/h ÷ capacidade) × 100</code>. Novecentos mAh/h é
-        catastrófico num aparelho de 3000 mAh e apenas ruim num de 5000 mAh. Comparar valores
-        absolutos entre capacidades diferentes é erro de normalização — e detectá-lo vale ponto.</p>
+        <span class="tag">As duas derivadas</span>
+        <h3>Como calcular</h3>
+        <p><code>drenoAbsoluto = mAh ÷ (screenOnMinutes ÷ 60)</code>, em mAh/h.</p>
+        <p><code>drenoRelativo = (drenoAbsoluto ÷ capacidade) × 100</code>, em %/h. É esta segunda
+        que entra na classificação.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Por que o relativo</span>
+        <h3>Comparabilidade entre aparelhos</h3>
+        <p>900 mAh/h significa coisas diferentes numa bateria de 3000 mAh e numa de 5000 mAh.
+        Dividir pela capacidade coloca aparelhos distintos na mesma escala. Comparar valores
+        absolutos entre capacidades diferentes é um erro de normalização.</p>
       </div>
       <div class="card">
         <span class="tag">Domínio e apresentação</span>
-        <h3>O nome do estado não é o texto da tela</h3>
-        <p>O domínio trabalha com <code class="mono">OK</code>, <code class="mono">ATENCAO</code>,
-        <code class="mono">CRITICO</code>, <code class="mono">INDETERMINADO</code>. A interface
-        rotula como quiser — "Sem dados", por exemplo. Se a sua enumeração de domínio contém a
-        string exibida na tela, as duas camadas vazaram uma na outra.</p>
+        <h3>O estado não é o rótulo</h3>
+        <p>No domínio, use <code>OK</code>, <code>ATENCAO</code>, <code>CRITICO</code>,
+        <code>INDETERMINADO</code>. A interface escolhe o texto exibido — "Sem dados", por exemplo.
+        Se a sua enumeração de domínio contém a string da tela, as duas camadas se misturaram.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px">
+      <span class="tag">Você pode propor outra regra</span>
+      <p style="color:var(--text-2)">
+        Os limiares acima são uma referência. Você pode substituí-los por percentil da própria
+        frota, por tier de SoC, ou por uma combinação ponderada de sinais. A condição é declarar a
+        regra adotada no <code>PROTOCOLO.md</code> antes de apresentar os resultados, com o
+        raciocínio que levou a ela. Critério escolhido depois de ver o resultado tende a ser
+        escolhido para favorecê-lo.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 05 — ARQUITETURA ═══════════════ -->
+<section class="band">
+  <div class="wrap band-inner">
+    <div class="eyebrow">05 — A restrição de arquitetura</div>
+    <h2>As dependências apontam para dentro.</h2>
+    <p class="lede">
+      Três camadas e uma regra. <code>ui</code> conhece <code>domain</code>.
+      <code>data</code> conhece <code>domain</code>. E <code>domain</code> não conhece ninguém:
+      sem <code>import android.*</code>, sem JSON, sem <code>Context</code>.
+    </p>
+
+    <div class="stack" id="stack">
+      <div class="stack-in" id="stackIn">
+        <div class="layer l-ui">
+          <div class="lname">ui/</div>
+          <div class="lnote">Compose · ViewModel · navegação</div>
+        </div>
+        <div class="layer l-data">
+          <div class="lname">data/</div>
+          <div class="lnote">JSON · DataStore · Android</div>
+        </div>
+        <div class="layer l-dom">
+          <div class="lname">domain/</div>
+          <div class="lnote">Device · DeviceStatus · ClassifyDevice<br>Kotlin puro — zero import android.*</div>
+        </div>
+      </div>
+    </div>
+    <div class="dep">
+      <div class="txt">ui ──▶ <b>domain</b> ◀── data<br>
+        <span style="color:var(--text-3)">domain declara a interface; data a implementa</span></div>
+    </div>
+
+    <div class="two" style="margin-top:44px">
+      <div class="card">
+        <span class="tag">Como a inversão funciona</span>
+        <h3>A interface pertence a quem a usa</h3>
+        <p>O <code>domain</code> declara <code>interface DeviceRepository</code> com a operação de
+        que precisa. O <code>data</code> escreve a classe que a implementa lendo o arquivo. O
+        domínio passa a depender de uma abstração que ele mesmo definiu, e a infraestrutura depende
+        do domínio.</p>
+        <p>Esse desenho é a arquitetura hexagonal, descrita por Alistair Cockburn em 2005 e
+        reapresentada como Clean Architecture por Robert Martin em 2012. Os dois textos originais
+        estão linkados na seção 06.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Como verificar sozinho</span>
+        <h3>Dois comandos e uma substituição</h3>
+        <p><code>grep -r "import android" domain/</code> não pode retornar nada.
+        <code>./gradlew test</code> precisa passar sem emulador.</p>
+        <p>E trocar a implementação de <code>DeviceRepository</code> por uma versão de teste deve
+        exigir zero alteração em <code>domain/</code>. Se a sua classificação está dentro de um
+        <code>Composable</code> ou dentro do parser do JSON, ela está na camada errada.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ REQUISITOS ═══════════════ -->
+<!-- ═══════════════ 06 — MAPA DE ESTUDO ═══════════════ -->
 <section class="band">
   <div class="wrap band-inner">
-    <div class="eyebrow">06 — Requisitos</div>
-    <h2>Dez requisitos, todos verificáveis por terceiros.</h2>
-    <p class="lede">Cada um tem um critério de aceitação objetivo no documento técnico.</p>
+    <div class="eyebrow">06 — Mapa de estudo</div>
+    <h2>Documentação oficial, agrupada pela parte do app que ela serve.</h2>
+    <p class="lede">
+      Cada link vem acompanhado do motivo pelo qual ele aparece aqui. Você não precisa ler tudo:
+      localize a parte em que travou e vá direto ao grupo correspondente.
+    </p>
+
+    <div class="study">
+      <div>
+        <h3>A · Kotlin e o ambiente</h3>
+        <p class="hint">Comece por aqui se Kotlin ou Android for novo para você.</p>
+        <ul class="links">
+          <li><a href="https://developer.android.com/courses/android-basics-compose/course" target="_blank" rel="noopener">
+            <span class="nm">Android Basics with Compose<span class="why">Curso oficial do zero. As duas primeiras unidades bastam para começar o desafio.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://kotlinlang.org/docs/basic-syntax.html" target="_blank" rel="noopener">
+            <span class="nm">Sintaxe básica de Kotlin<span class="why">Funções, variáveis, condicionais e laços.</span></span>
+            <span class="src">Kotlin</span></a></li>
+          <li><a href="https://kotlinlang.org/docs/null-safety.html" target="_blank" rel="noopener">
+            <span class="nm">Null safety<span class="why">Campos ausentes no JSON chegam como nulos: é aqui que o Defeito 2 é tratado com segurança.</span></span>
+            <span class="src">Kotlin</span></a></li>
+          <li><a href="https://kotlinlang.org/docs/data-classes.html" target="_blank" rel="noopener">
+            <span class="nm">Data classes<span class="why">Como modelar <code>Device</code> e o DTO que espelha o JSON.</span></span>
+            <span class="src">Kotlin</span></a></li>
+          <li><a href="https://kotlinlang.org/docs/sealed-classes.html" target="_blank" rel="noopener">
+            <span class="nm">Sealed classes e enums<span class="why">Como representar os quatro estados de <code>DeviceStatus</code> de forma exaustiva.</span></span>
+            <span class="src">Kotlin</span></a></li>
+          <li><a href="https://kotlinlang.org/docs/collections-overview.html" target="_blank" rel="noopener">
+            <span class="nm">Coleções<span class="why"><code>map</code>, <code>filter</code> e <code>groupBy</code> resolvem a lista filtrada e a contagem por status.</span></span>
+            <span class="src">Kotlin</span></a></li>
+          <li><a href="https://developer.android.com/kotlin/coroutines" target="_blank" rel="noopener">
+            <span class="nm">Coroutines no Android<span class="why">Ler o arquivo fora da thread principal.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://kotlinlang.org/docs/coroutines-overview.html" target="_blank" rel="noopener">
+            <span class="nm">Coroutines — documentação da linguagem<span class="why">A base conceitual, se o guia do Android ficar denso.</span></span>
+            <span class="src">Kotlin</span></a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>B · Interface em Compose</h3>
+        <p class="hint">Tudo o que as duas telas exigem.</p>
+        <ul class="links">
+          <li><a href="https://developer.android.com/develop/ui/compose/tutorial" target="_blank" rel="noopener">
+            <span class="nm">Tutorial de Jetpack Compose<span class="why">Primeira tela, layouts e composição.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://developer.android.com/develop/ui/compose/state" target="_blank" rel="noopener">
+            <span class="nm">Estado em Compose<span class="why">Como o filtro selecionado e a marcação de favorito recompõem a tela.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://developer.android.com/develop/ui/compose/lists" target="_blank" rel="noopener">
+            <span class="nm">Listas e grades<span class="why"><code>LazyColumn</code> para os trinta dispositivos da Tela 1.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://developer.android.com/guide/navigation" target="_blank" rel="noopener">
+            <span class="nm">Navegação<span class="why">Lista → detalhe, e o botão voltar preservando o filtro.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://developer.android.com/develop/ui/compose/documentation" target="_blank" rel="noopener">
+            <span class="nm">Índice da documentação de Compose<span class="why">Ponto de partida para qualquer dúvida de UI não coberta acima.</span></span>
+            <span class="src">Android</span></a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>C · Arquitetura e camadas</h3>
+        <p class="hint">O eixo de maior peso na avaliação. Leia antes de escrever a primeira classe.</p>
+        <ul class="links">
+          <li><a href="https://developer.android.com/topic/architecture" target="_blank" rel="noopener">
+            <span class="nm">Guia de arquitetura de apps<span class="why">O documento central. Leia inteiro, é curto.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://developer.android.com/topic/architecture/ui-layer" target="_blank" rel="noopener">
+            <span class="nm">Camada de UI<span class="why">Estado da tela, eventos e o papel do ViewModel.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://developer.android.com/topic/architecture/domain-layer" target="_blank" rel="noopener">
+            <span class="nm">Camada de domínio<span class="why">Onde <code>ClassifyDevice</code> mora e por quê.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://developer.android.com/topic/architecture/data-layer" target="_blank" rel="noopener">
+            <span class="nm">Camada de dados<span class="why">Repositório, fontes de dados e o mapeamento DTO → modelo, onde a conversão de unidade acontece.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://developer.android.com/topic/libraries/architecture/viewmodel" target="_blank" rel="noopener">
+            <span class="nm">ViewModel<span class="why">Sobreviver à rotação de tela sem recarregar o arquivo.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://developer.android.com/training/dependency-injection" target="_blank" rel="noopener">
+            <span class="nm">Injeção de dependência no Android<span class="why">Inclui a versão manual, que é suficiente aqui. Nada obriga a usar Hilt.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://developer.android.com/topic/architecture/recommendations" target="_blank" rel="noopener">
+            <span class="nm">Recomendações de arquitetura<span class="why">Lista objetiva do que o time do Android considera boa prática.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://alistair.cockburn.us/hexagonal-architecture" target="_blank" rel="noopener">
+            <span class="nm">Hexagonal Architecture — Cockburn, 2005<span class="why">O texto original que motivou separar a regra da infraestrutura.</span></span>
+            <span class="src">Artigo</span></a></li>
+          <li><a href="https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html" target="_blank" rel="noopener">
+            <span class="nm">The Clean Architecture — Martin, 2012<span class="why">A formulação da regra de dependência apontando para dentro.</span></span>
+            <span class="src">Artigo</span></a></li>
+          <li><a href="https://martinfowler.com/articles/injection.html" target="_blank" rel="noopener">
+            <span class="nm">Inversion of Control e Dependency Injection — Fowler<span class="why">A explicação conceitual, independente de framework.</span></span>
+            <span class="src">Artigo</span></a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>D · Dados e persistência</h3>
+        <p class="hint">Ler o arquivo, mapear o JSON e guardar os favoritos.</p>
+        <ul class="links">
+          <li><a href="https://developer.android.com/reference/android/content/res/AssetManager" target="_blank" rel="noopener">
+            <span class="nm">AssetManager<span class="why">Como abrir <code>assets/frota.json</code> em tempo de execução.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://kotlinlang.org/docs/serialization.html" target="_blank" rel="noopener">
+            <span class="nm">Serialização em Kotlin<span class="why">Guia oficial de <code>kotlinx.serialization</code> — como desserializar o JSON em data classes.</span></span>
+            <span class="src">Kotlin</span></a></li>
+          <li><a href="https://github.com/Kotlin/kotlinx.serialization" target="_blank" rel="noopener">
+            <span class="nm">kotlinx.serialization — repositório<span class="why">Configuração no Gradle e opções como <code>ignoreUnknownKeys</code>.</span></span>
+            <span class="src">GitHub</span></a></li>
+          <li><a href="https://developer.android.com/topic/libraries/architecture/datastore" target="_blank" rel="noopener">
+            <span class="nm">DataStore<span class="why">Persistir os favoritos sem banco de dados.</span></span>
+            <span class="src">Android</span></a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>E · Testes e integração contínua</h3>
+        <p class="hint">Os testes rodam na JVM. Nenhum deles precisa de emulador.</p>
+        <ul class="links">
+          <li><a href="https://developer.android.com/training/testing/fundamentals" target="_blank" rel="noopener">
+            <span class="nm">Fundamentos de teste no Android<span class="why">A diferença entre teste local e instrumentado, e por que o seu caso é local.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://developer.android.com/training/testing/local-tests" target="_blank" rel="noopener">
+            <span class="nm">Testes locais na JVM<span class="why">Onde colocar os arquivos e como rodar com <code>./gradlew test</code>.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://kotlinlang.org/api/core/kotlin-test/" target="_blank" rel="noopener">
+            <span class="nm">Biblioteca kotlin.test<span class="why">Referência das asserções.</span></span>
+            <span class="src">Kotlin</span></a></li>
+          <li><a href="https://martinfowler.com/bliki/TestDouble.html" target="_blank" rel="noopener">
+            <span class="nm">Test Double — Fowler<span class="why">O vocabulário de fake, stub e mock, necessário para substituir o repositório nos testes.</span></span>
+            <span class="src">Artigo</span></a></li>
+          <li><a href="https://docs.github.com/en/actions" target="_blank" rel="noopener">
+            <span class="nm">GitHub Actions<span class="why">Como escrever o workflow que roda lint e testes a cada push.</span></span>
+            <span class="src">GitHub</span></a></li>
+          <li><a href="https://github.com/gradle/actions" target="_blank" rel="noopener">
+            <span class="nm">Actions oficiais do Gradle<span class="why">Configuração e cache do Gradle no CI, o que encurta muito a execução.</span></span>
+            <span class="src">GitHub</span></a></li>
+          <li><a href="https://developer.android.com/studio/write/lint" target="_blank" rel="noopener">
+            <span class="nm">Android Lint<span class="why">Análise estática já incluída no projeto, suficiente para o requisito de CI.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://detekt.dev/" target="_blank" rel="noopener">
+            <span class="nm">detekt<span class="why">Alternativa de análise estática específica para Kotlin.</span></span>
+            <span class="src">Ferramenta</span></a></li>
+          <li><a href="https://docs.gradle.org/current/userguide/userguide.html" target="_blank" rel="noopener">
+            <span class="nm">Manual do Gradle<span class="why">Consulta quando o build falhar por configuração.</span></span>
+            <span class="src">Gradle</span></a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>F · Registro de decisões</h3>
+        <p class="hint">Para o <code>PROTOCOLO.md</code> e o <code>README.md</code>.</p>
+        <ul class="links">
+          <li><a href="https://adr.github.io/" target="_blank" rel="noopener">
+            <span class="nm">Architecture Decision Records<span class="why">Formato enxuto para registrar uma decisão, suas alternativas e sua consequência.</span></span>
+            <span class="src">Referência</span></a></li>
+        </ul>
+        <h3 style="margin-top:28px">G · Depuração</h3>
+        <p class="hint">Quando o app rodar e o resultado não for o esperado.</p>
+        <ul class="links">
+          <li><a href="https://developer.android.com/studio/debug/dev-options" target="_blank" rel="noopener">
+            <span class="nm">Opções do desenvolvedor<span class="why">Habilitar depuração e inspecionar o comportamento do app no aparelho ou emulador.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://developer.android.com/develop/ui/compose/testing" target="_blank" rel="noopener">
+            <span class="nm">Teste de UI em Compose<span class="why">Opcional. Útil se você quiser prender o comportamento da lista e do filtro.</span></span>
+            <span class="src">Android</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 07 — REQUISITOS ═══════════════ -->
+<section class="band">
+  <div class="wrap band-inner">
+    <div class="eyebrow">07 — Requisitos</div>
+    <h2>Dez requisitos. Os critérios de aceitação estão no PDF.</h2>
+    <p class="lede">
+      Cada requisito tem um critério objetivo, que outra pessoa consegue verificar sem perguntar
+      nada a você. Use esta lista como checklist antes de entregar.
+    </p>
 
     <div class="reqs">
       <div class="req"><div class="n">REQ-01</div><div><h4>Ingestão local</h4>
-        <p>Carrega de <code class="mono">assets/frota.json</code>, sem rede e sem permissão de internet.</p></div></div>
+        <p>Carregar de <code>assets/frota.json</code>, sem rede e sem permissão de internet.</p></div></div>
       <div class="req"><div class="n">REQ-02</div><div><h4>Normalização de unidades</h4>
-        <p>mWh convertido para mAh antes de qualquer comparação, agregação ou classificação.</p></div></div>
+        <p>Converter mWh para mAh antes de qualquer comparação, soma ou classificação.</p></div></div>
       <div class="req"><div class="n">REQ-03</div><div><h4>Registros incompletos</h4>
-        <p>Tratamento explícito e documentado. Nenhum <code class="mono">NaN</code>, nenhum encerramento.</p></div></div>
+        <p>Tratamento explícito e documentado. Nenhum <code>NaN</code>, nenhum encerramento.</p></div></div>
       <div class="req"><div class="n">REQ-04</div><div><h4>Regra no domínio</h4>
-        <p>Kotlin puro, sem <code class="mono">import android.*</code>, sem conhecer JSON nem Context.</p></div></div>
+        <p>Kotlin puro, sem <code>import android.*</code>, sem conhecer JSON nem <code>Context</code>.</p></div></div>
       <div class="req"><div class="n">REQ-05</div><div><h4>Tela de lista</h4>
         <p>Todos os dispositivos, chip de status distinto, filtro com contagem por estado.</p></div></div>
       <div class="req"><div class="n">REQ-06</div><div><h4>Detalhe com justificativa</h4>
         <p>O texto nomeia o sinal responsável e o valor observado. Voltar preserva o filtro.</p></div></div>
       <div class="req"><div class="n">REQ-07</div><div><h4>Favoritos persistentes</h4>
-        <p>Sobrevivem ao encerramento completo do processo.</p></div></div>
+        <p>A marcação sobrevive ao encerramento completo do app.</p></div></div>
       <div class="req"><div class="n">REQ-08</div><div><h4>Testes na JVM</h4>
         <p>Unidade, registro incompleto e os dois lados de cada fronteira de limiar.</p></div></div>
       <div class="req"><div class="n">REQ-09</div><div><h4>Integração contínua</h4>
         <p>Análise estática e suíte de testes a cada push, verde na entrega.</p></div></div>
       <div class="req"><div class="n">REQ-10</div><div><h4>Protocolo de decisões</h4>
-        <p>Regra adotada, tratamento dos defeitos e uma ameaça à validade da sua conclusão.</p></div></div>
+        <p>Regra adotada, tratamento dos dois defeitos e uma ameaça à validade da sua conclusão.</p></div></div>
     </div>
 
-    <div class="card" style="margin-top:28px;border-color:rgba(242,180,65,.3)">
-      <span class="tag" style="color:var(--warn)">O requisito que mais revela maturidade</span>
-      <h3>A ameaça à validade</h3>
-      <p>É o item que a maioria trata como formalidade. Um exemplo do que se espera:
-      <em>"o dreno relativo assume que todo o consumo ocorreu com a tela ligada; em aparelhos com
-      serviço em primeiro plano e tela desligada a métrica superestima o dreno e pode gerar falso
-      Crítico."</em> Isso é conhecer o próprio instrumento.</p>
+    <div class="two" style="margin-top:28px">
+      <div class="card">
+        <span class="tag">REQ-08 · o que torna um teste útil</span>
+        <h3>Teste que falha quando a regra muda</h3>
+        <p>Para cada limiar, escreva dois casos: um valor imediatamente abaixo, que não deve promover
+        o status, e um imediatamente acima, que deve. Esse par detecta quem ajusta o limiar até o
+        teste passar, e detecta também o erro de usar <code>&gt;</code> onde deveria ser
+        <code>&gt;=</code>.</p>
+        <p>Um teste que passaria com qualquer implementação não verifica nada.</p>
+      </div>
+      <div class="card">
+        <span class="tag">REQ-10 · o que é uma ameaça à validade</span>
+        <h3>Uma razão concreta para o seu resultado estar errado</h3>
+        <p>Não é uma ressalva genérica. É uma afirmação específica sobre o seu método. Exemplo:
+        <em>"o dreno relativo assume que todo o consumo ocorreu com a tela ligada; em aparelhos com
+        serviço em primeiro plano e tela desligada a métrica superestima o dreno e pode gerar falso
+        Crítico."</em></p>
+        <p>Escreva uma no <code>PROTOCOLO.md</code>, referente à regra que você adotou.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ AVALIAÇÃO ═══════════════ -->
+<!-- ═══════════════ 08 — AVALIAÇÃO ═══════════════ -->
 <section class="band">
   <div class="wrap band-inner">
-    <div class="eyebrow">07 — Avaliação</div>
-    <h2>Cem pontos, distribuídos pelo que o desafio mede.</h2>
+    <div class="eyebrow">08 — Como a entrega é avaliada</div>
+    <h2>Cem pontos, com os pesos abertos.</h2>
     <p class="lede">
-      Não é a quantidade de telas, nem o visual, nem o número de linhas. É a qualidade das
-      fronteiras e a honestidade das decisões registradas.
+      Quantidade de telas, escolha de cores e número de linhas não pontuam. O que pontua está
+      distribuído abaixo.
     </p>
 
     <div class="meters">
@@ -740,65 +936,118 @@ footer{border-top:1px solid var(--line-soft);background:#04070c}
         <div class="pt">15</div>
       </div>
       <div class="meter bonus">
-        <div class="lb">Trilha de especialização<em>Extensão opcional sobre o mesmo app</em></div>
+        <div class="lb">Trilha de especialização<em>Extensão opcional, seção 09</em></div>
         <div class="track"><i style="width:80%;animation-delay:.5s"></i></div>
         <div class="pt">+20</div>
       </div>
     </div>
 
-    <div class="card" style="margin-top:34px;border-color:rgba(255,107,107,.26)">
-      <span class="tag" style="color:var(--crit)">Condições que limitam a nota</span>
-      <p style="color:var(--text-2)">
-        <code class="mono">import android.*</code> dentro de <code class="mono">domain/</code>, ou
-        classificação escrita num <code class="mono">Composable</code>, zera o eixo de arquitetura.
-        Unidades não normalizadas, ou <code class="mono">NaN</code> num registro incompleto, zeram o
-        eixo de correção do domínio. CI vermelha, ou suíte que passa com qualquer implementação,
-        zera o eixo de testes. Ausência de <code class="mono">PROTOCOLO.md</code> limita o total a 60.
-      </p>
-      <p style="color:var(--text-3);margin-top:12px">
-        Nenhuma dessas é punição arbitrária: cada uma descreve um caso em que o eixo
-        correspondente simplesmente não pode ser avaliado.
-      </p>
+    <div class="two" style="margin-top:34px">
+      <div class="card" style="border-color:rgba(255,107,107,.26)">
+        <span class="tag" style="color:var(--crit)">Condições que zeram um eixo</span>
+        <p style="color:var(--text-2)">
+          <code>import android.*</code> dentro de <code>domain/</code>, ou a classificação escrita
+          dentro de um <code>Composable</code>, zera o eixo de arquitetura. Unidades não
+          normalizadas, ou <code>NaN</code> em registro incompleto, zeram o eixo de correção do
+          domínio. CI vermelha, ou suíte que passa com qualquer implementação, zera o eixo de
+          testes. Sem <code>PROTOCOLO.md</code>, o total fica limitado a 60.
+        </p>
+        <p style="color:var(--text-3);margin-top:12px">
+          Em cada um desses casos o eixo correspondente não pode ser verificado, e por isso não
+          recebe nota.
+        </p>
+      </div>
+      <div class="card">
+        <span class="tag">O que compõe a entrega</span>
+        <p style="color:var(--text-2)">
+          Repositório Git com histórico legível; o projeto Android compilando;
+          <code>PROTOCOLO.md</code> com a regra adotada, o tratamento dos dois defeitos e a ameaça
+          à validade; <code>README.md</code> com instruções de execução, decisões de projeto e o
+          que você faria em seguida; a última execução de CI verde; e uma captura de cada tela no
+          README.
+        </p>
+        <p style="color:var(--text-3);margin-top:12px">
+          O uso de assistentes de IA é permitido. Registre no README, em poucas linhas, onde você
+          os usou — a entrevista técnica parte do seu código.
+        </p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ TRILHAS ═══════════════ -->
+<!-- ═══════════════ 09 — TRILHAS ═══════════════ -->
 <section class="band">
   <div class="wrap band-inner">
-    <div class="eyebrow">08 — Trilhas de especialização</div>
+    <div class="eyebrow">09 — Trilhas de especialização</div>
     <h2>Extensões opcionais. Escolha no máximo uma.</h2>
     <p class="lede">
-      Sinalizam afinidade, não compõem a nota mínima. São avaliadas pela profundidade de uma ideia,
-      não pela quantidade de código — e nenhuma substitui um requisito obrigatório.
+      As trilhas são avaliadas pela profundidade de uma ideia, não pela quantidade de código, e
+      nenhuma substitui um requisito obrigatório. Cada uma traz os próprios links de estudo.
     </p>
     <div class="three" style="margin-top:36px">
       <div class="card track-card">
         <span class="tag">Trilha A</span>
         <h3>IA aplicada à otimização</h3>
-        <p>Uma segunda implementação da interface de classificação, orientada por dados em vez de
-        limiares fixos: percentil da frota, agrupamento, ou um modelo simples embarcado.</p>
-        <p style="color:var(--text-3)"><b style="color:var(--blue);font-weight:500">Avalia-se</b> a
-        comparação contra a linha de base. Uma regra de percentil bem justificada vence uma rede
-        neural sem comparação.</p>
+        <p>Escreva uma segunda implementação da interface de classificação, orientada por dados em
+        vez de limiares fixos: percentil da frota, agrupamento, ou um modelo simples embarcado.
+        Compare com a regra de referência e diga qual erra menos, em qual caso e por quê.</p>
+        <p style="color:var(--text-3)">O que se avalia é a comparação contra a linha de base. Uma
+        regra de percentil bem justificada vale mais que um modelo complexo sem comparação.</p>
+        <ul class="links">
+          <li><a href="https://developers.google.com/edge/litert" target="_blank" rel="noopener">
+            <span class="nm">LiteRT<span class="why">Execução de modelos no próprio aparelho.</span></span>
+            <span class="src">Google</span></a></li>
+          <li><a href="https://developer.android.com/ai" target="_blank" rel="noopener">
+            <span class="nm">IA no Android<span class="why">Panorama das opções de inferência on-device.</span></span>
+            <span class="src">Android</span></a></li>
+        </ul>
       </div>
       <div class="card track-card b">
         <span class="tag">Trilha B</span>
         <h3>Segurança e automação</h3>
-        <p>Endurecer o manifest, garantir que nenhum identificador de dispositivo chegue ao log, e
-        escrever uma verificação automatizada que falhe o build quando uma dessas regras for violada.</p>
-        <p style="color:var(--text-3)"><b style="color:var(--warn);font-weight:500">Avalia-se</b> a
-        automação e o tratamento de um falso positivo — um verificador que grita em tudo é um
-        verificador que ninguém usa.</p>
+        <p>Endureça o manifest, garanta que nenhum identificador de dispositivo chegue ao log, e
+        escreva uma verificação automatizada que falhe o build quando uma dessas regras for
+        violada. Demonstre um falso positivo e explique como tratá-lo.</p>
+        <p style="color:var(--text-3)">O que se avalia é a verificação ser automatizada e o
+        tratamento do falso positivo: um verificador que acusa tudo deixa de ser usado.</p>
+        <ul class="links">
+          <li><a href="https://developer.android.com/privacy-and-security/security-best-practices" target="_blank" rel="noopener">
+            <span class="nm">Boas práticas de segurança<span class="why">Checklist oficial para apps Android.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://developer.android.com/guide/topics/manifest/manifest-intro" target="_blank" rel="noopener">
+            <span class="nm">O AndroidManifest<span class="why">Os atributos que a sua verificação vai inspecionar.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://www.gov.br/anpd/pt-br" target="_blank" rel="noopener">
+            <span class="nm">ANPD<span class="why">Autoridade Nacional de Proteção de Dados — referência para a discussão de LGPD.</span></span>
+            <span class="src">Brasil</span></a></li>
+        </ul>
       </div>
       <div class="card track-card c">
         <span class="tag">Trilha C</span>
         <h3>Eficiência energética</h3>
-        <p>Agendar a releitura com <code class="mono">WorkManager</code> e justificar a política
-        escolhida — frequência, restrições, comportamento em Doze — pelo custo energético estimado.</p>
-        <p style="color:var(--text-3)"><b style="color:var(--ok);font-weight:500">Avalia-se</b> a
-        justificativa quantitativa. E a pergunta: a recomendação muda quando você separa os
-        dispositivos por tier de SoC?</p>
+        <p>Agende a releitura da frota com <code>WorkManager</code> e justifique a política
+        escolhida — frequência, restrições, comportamento em Doze — a partir do custo energético
+        estimado. Responda também: a recomendação muda se você separar os dispositivos por tier
+        de SoC?</p>
+        <p style="color:var(--text-3)">O que se avalia é a justificativa quantitativa da política
+        escolhida.</p>
+        <ul class="links">
+          <li><a href="https://developer.android.com/develop/background-work/background-tasks/persistent" target="_blank" rel="noopener">
+            <span class="nm">WorkManager<span class="why">Trabalho em segundo plano com restrições e garantia de execução.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://developer.android.com/training/monitoring-device-state/doze-standby" target="_blank" rel="noopener">
+            <span class="nm">Doze e App Standby<span class="why">O que o sistema suspende quando o aparelho fica parado.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://developer.android.com/topic/performance/power/power-details" target="_blank" rel="noopener">
+            <span class="nm">Consumo de energia por componente<span class="why">De onde vem o gasto que você vai estimar.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://developer.android.com/studio/profile/power-profiler" target="_blank" rel="noopener">
+            <span class="nm">Power Profiler<span class="why">Medição de energia no Android Studio.</span></span>
+            <span class="src">Android</span></a></li>
+          <li><a href="https://perfetto.dev/docs/" target="_blank" rel="noopener">
+            <span class="nm">Perfetto<span class="why">Ferramenta de rastreamento usada para analisar desempenho e energia.</span></span>
+            <span class="src">Perfetto</span></a></li>
+        </ul>
       </div>
     </div>
   </div>
@@ -963,14 +1212,14 @@ footer{border-top:1px solid var(--line-soft);background:#04070c}
       abs: RAW / (MIN / 60),
       rel: (RAW / (MIN / 60)) / CAP * 100,
       pill: 'Crítico', cls: 'pill p-cr',
-      foot: '<b>O mesmo aparelho, o mesmo arquivo, o veredito oposto.</b> Tratar 3773 mWh como se fosse mAh infla o consumo em 3,85× e condena um dispositivo saudável. Não é arredondamento — é inversão de resultado.'
+      foot: '<b>Compare os dois botões acima.</b> Tratar 3773 mWh como se fosse mAh multiplica o consumo por 3,85 e classifica como Crítico um aparelho saudável. A diferença não é de arredondamento: é de resultado.'
     },
     fix: {
       energy: RAW / V, unit: 'mAh',
       abs: (RAW / V) / (MIN / 60),
       rel: ((RAW / V) / (MIN / 60)) / CAP * 100,
       pill: 'OK', cls: 'pill p-ok',
-      foot: '<b>Com a conversão, o aparelho é saudável.</b> 3773 mWh ÷ 3,85 V = 980 mAh. O dreno cai para 6,3 %/h, abaixo do limiar de atenção. Nenhum sinal dispara.'
+      foot: '<b>Com a conversão, o aparelho é saudável.</b> 3773 mWh ÷ 3,85 V = 980 mAh. O dreno cai para 6,3 %/h, abaixo do limiar de atenção, e nenhum sinal dispara.'
     }
   };
 
