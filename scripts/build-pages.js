@@ -16,6 +16,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SRC = path.join(ROOT, 'site', 'index.html');
 const OUT_DIR = path.join(ROOT, '_site');
 const PDF = path.join(ROOT, 'docs', 'desafio-tecnico.pdf');
+const DATA = path.join(ROOT, 'data', 'frota.json');
 
 const DESCRIPTION =
   'Desafio técnico de engenharia Android: um app Kotlin/Compose de duas telas ' +
@@ -66,11 +67,19 @@ ${body}
 
 fs.rmSync(OUT_DIR, { recursive: true, force: true });
 fs.mkdirSync(OUT_DIR, { recursive: true });
+if (!fs.existsSync(DATA)) {
+  console.error('build-pages: data/frota.json não encontrado.');
+  console.error('Gere o arquivo antes de publicar: node tools/gen-frota.js');
+  process.exit(1);
+}
+
 fs.writeFileSync(path.join(OUT_DIR, 'index.html'), page, 'utf8');
 fs.copyFileSync(PDF, path.join(OUT_DIR, 'desafio-tecnico.pdf'));
+fs.copyFileSync(DATA, path.join(OUT_DIR, 'frota.json'));
 fs.writeFileSync(path.join(OUT_DIR, '.nojekyll'), '', 'utf8');
 
 const kb = (n) => Math.round(fs.statSync(n).size / 1024) + ' KB';
 console.log('_site/index.html            ' + kb(path.join(OUT_DIR, 'index.html')));
 console.log('_site/desafio-tecnico.pdf   ' + kb(path.join(OUT_DIR, 'desafio-tecnico.pdf')));
+console.log('_site/frota.json            ' + kb(path.join(OUT_DIR, 'frota.json')));
 console.log('_site/.nojekyll');

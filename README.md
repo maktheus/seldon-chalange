@@ -15,6 +15,8 @@ Desafio técnico de engenharia Android — **Residência Tecnológica, Módulo 1
 | `site/index.html` | Página de apresentação do desafio, com campo 3D, mockup das duas telas e demonstração interativa do defeito de unidade |
 | `docs/desafio-tecnico.pdf` | Especificação técnica completa — 17 páginas, normativa |
 | `docs/desafio-tecnico.html` | Fonte do PDF (renderizado com Chromium headless) |
+| `data/frota.json` | O arquivo de entrada do desafio — 30 dispositivos, com os dois defeitos plantados |
+| `tools/gen-frota.js` | Gerador do dataset, com `--seed` para produzir um arquivo distinto por candidato |
 
 ## O que o desafio mede
 
@@ -35,8 +37,24 @@ testes e integração contínua (15), documentação e justificativa (15). Trilh
 opcional vale +20. A rubrica completa, os critérios de aceitação de cada requisito e as condições
 que limitam a nota estão no PDF.
 
-## Regerar o PDF
+## Regerar os artefatos
 
 ```bash
-node scripts/topdf.js   # requer playwright + chromium
+node tools/gen-frota.js             # gera data/frota.json (use --seed N para variar)
+node scripts/topdf.js               # gera docs/desafio-tecnico.pdf
+node scripts/build-pages.js         # monta _site/ para o GitHub Pages
 ```
+
+O gerador do dataset é determinístico: a mesma semente produz o mesmo arquivo byte a byte.
+Seis dispositivos têm valores fixos, independentes da semente, porque aparecem com números
+literais na especificação e na interface de referência. Antes de escrever o arquivo, o
+gerador confere que a distribuição é exatamente 16 OK / 8 Atenção / 4 Crítico /
+2 Indeterminado — as contagens exibidas nos filtros da tela de lista — e aborta se divergir.
+
+## Publicação
+
+- Site: https://maktheus.github.io/seldon-chalange/
+- Arquivo de entrada: https://maktheus.github.io/seldon-chalange/frota.json
+- Especificação: https://maktheus.github.io/seldon-chalange/desafio-tecnico.pdf
+
+O deploy roda pelo GitHub Actions a cada push na branch default.
